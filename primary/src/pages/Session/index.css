@@ -1,0 +1,40 @@
+.primary-rdc {
+  height: '100vh';
+  width: '100vw';
+}
+
+.primary-rdc .ant-tabs-top > .ant-tabs-nav {
+  margin: 0;
+  background-color: #fff;
+}
+
+.primary-rdc {
+  background-color: #000;
+}
+
+.primary-rdc .primary-rdc-screen-wrap {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.primary-rdc-screen-wrap .rdc-screen {
+  margin: 3px 0;
+}
+
+.primary-rdc-screen-wrap .control-bar {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
+.primary-rdc .channel {
+  position: fixed;
+  display: inline-block;
+  bottom: 2px;
+  left: 2px;
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: #1890ff;
+  background-color: rgba(0, 0, 0, 0.3);
+}

@@ -1,0 +1,40 @@
+{
+  "name": "rdc-server",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "nest build",
+    "start": "DEBUG=ioredis:* nest start --watch",
+    "start:prod": "NODE_ENV=production node dist/main"
+  },
+  "dependencies": {
+    "@nestjs/common": "^7.0.0",
+    "@nestjs/config": "^0.6.1",
+    "@nestjs/core": "^7.0.0",
+    "@nestjs/platform-express": "^7.0.0",
+    "@types/lodash": "^4.14.164",
+    "agora-access-token": "^2.0.4",
+    "axios": "^0.20.0",
+    "js-md5": "^0.7.3",
+    "lodash": "^4.17.20",
+    "nestjs-redis": "^1.2.8",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^6.5.4"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^7.0.0",
+    "@nestjs/schematics": "^7.0.0",
+    "@nestjs/testing": "^7.0.0",
+    "@types/express": "^4.17.3",
+    "@types/js-md5": "^0.4.2",
+    "@types/node": "^16.7.2",
+    "ts-node": "9.0.0",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.1.2"
+  }
+}

@@ -1,0 +1,12 @@
+# dirs
+build
+dist
+node_modules
+.vscode
+
+# misc
+*.log
+log
+.DS_Store
+agoraAddonlog.txt
+*.dmp
