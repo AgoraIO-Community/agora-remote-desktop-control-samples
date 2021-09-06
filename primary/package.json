@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "agora-electron-sdk": "3.4.7-rc.1-build.817",
-    "agora-rdc-electron": "^1.0.0-alpha.0",
-    "agora-rdc-webrtc-electron": "^1.0.0-alpha.0",
+    "agora-rdc-electron": "^1.0.0-alpha.1",
+    "agora-rdc-webrtc-electron": "^1.0.0-alpha.1",
     "agora-rtc-sdk-ng": "^4.6.3",
     "antd": "^4.16.7",
     "axios": "^0.21.1",
