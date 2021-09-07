@@ -105,5 +105,10 @@
     "nsis": {
       "license": "./eula.txt"
     }
+  },
+  "agora_electron": {
+    "electron_version": "7.1.2",
+    "prebuilt": true,
+    "arch": "x64"
   }
 }
