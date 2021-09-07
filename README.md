@@ -10,7 +10,7 @@ Agora Remote Desktop Control Demos
 ### Quick Start
 
 
-#### NOTICE: if you always broken with `electron` & `electron-builder` installing, please try below commands:
+#### NOTICE: if you are always broken with `electron` & `electron-builder` installing, please try below commands:
 ```
 $ npm set ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/
 $ npm set ELECTRON_BUILDER_BINARIES_MIRROR=http://npm.taobao.org/mirrors/electron-builder-binaries/
