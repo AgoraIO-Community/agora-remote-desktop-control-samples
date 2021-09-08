@@ -65,7 +65,7 @@ $ git clone git@github.com:AgoraIO-Community/agora-remote-desktop-control-sample
 #### Getting start with `secondary`, which is our `CONTROLLED` end demo.
 1. cd to directory
    ```sh
-   $ cd primary
+   $ cd secondary
    ```
    
 2. Install dependencies
