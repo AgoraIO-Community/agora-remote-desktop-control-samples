@@ -28,7 +28,7 @@ $ git clone git@github.com:AgoraIO-Community/agora-remote-desktop-control-sample
 
    ```sh
    $ cd rdc-server
-   $ docker-compose up -f ./docker-compose.test.yml -d
+   $ docker-compose -f ./docker-compose.test.yml up -d
    ```
 
 2. Copy .env.development.local.sample as .env.development.local
