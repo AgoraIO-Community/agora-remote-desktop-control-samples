@@ -16,12 +16,12 @@ jobs:
 
       - name: Build artifacts
         run: cd secondary && yarn build:testing
-
-       - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: secondary/dist/**/*.dmg
+        
+      - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        files: secondary/dist/**/*.dmg
 
   build-windows:
     runs-on: windows-latest
