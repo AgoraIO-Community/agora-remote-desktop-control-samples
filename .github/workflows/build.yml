@@ -58,7 +58,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: artifacts-${{ RUNNER_OS }}-${{ GITHUB_SHA }}
+          name: rdc-artifacts-${{ github.runner_os }}-${{ github.sha }}
           path: |
             ${{ github.workspace }}/**/dist/*.dmg
             ${{ github.workspace }}/**/dist/*.exe
