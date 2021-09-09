@@ -1,5 +1,5 @@
 name: CI
-on: [push, release]
+on: [push]
 
 jobs:
   build:
