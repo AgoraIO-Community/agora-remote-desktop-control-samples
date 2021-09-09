@@ -6,9 +6,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: set build number
-        run: export BUILD_NUMBER=${GITHUB_RUN_NUMBER}
-
       - name: install dependencies
         run: cd secondary && yarn install
 
@@ -24,9 +21,6 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: set build number
-        run: set BUILD_NUMBER=${GITHUB_RUN_NUMBER}
 
       - name: install dependencies
         run: cd secondary && yarn install
