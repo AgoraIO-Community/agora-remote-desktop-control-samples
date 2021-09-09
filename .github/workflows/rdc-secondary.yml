@@ -11,9 +11,10 @@ jobs:
         with:
           node-version: '14'
 
-      - name: install dependencies
+      - name: Install dependencies
         run: cd secondary && yarn install
-      - name: build artifacts
+
+      - name: Build artifacts
         run: cd secondary && yarn build:testing
 
        - name: Release
@@ -31,10 +32,10 @@ jobs:
         with:
           node-version: '14'
 
-      - name: install dependencies
+      - name: Install dependencies
         run: cd secondary && yarn install
 
-      - name: build artifacts
+      - name: Build artifacts
         run: cd secondary && yarn build:testing
 
       - name: Release
