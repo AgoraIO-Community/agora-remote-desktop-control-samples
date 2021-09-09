@@ -1,0 +1,37 @@
+name: CI
+on: [push, release]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: |
+          cd primary && yarn install
+          cd secondary && yarn install
+
+      - name: Build artifacts
+        run: |
+          cd primary && yarn build:testing
+          cd secondary && yarn build:testing
+
+      - name: Release artifacts
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            primary/dist/**/*.dmg
+            primary/dist/**/*.exe
+            secondary/dist/**/*.dmg
+            secondary/dist/**/*.exe
