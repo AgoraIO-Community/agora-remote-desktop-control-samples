@@ -1,0 +1,32 @@
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install dependencies
+        run: cd secondary && yarn install
+
+      - name: build artifacts
+        run: cd secondary && yarn build:testing
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: rdc-secondary-${GITHUB_REF}
+          path: secondary/dist/**/*.dmg
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install dependencies
+        run: cd secondary && yarn install
+
+      - name: build artifacts
+        run: cd secondary && yarn build:testing
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: rdc-secondary-${GITHUB_REF}
+          path: secondary/dist/**/*.exe
