@@ -47,6 +47,8 @@ jobs:
           security list-keychain -d user -s $KEYCHAIN_PATH
 
       - name: Build artifacts
+        env:
+          BUILD_NUMBER: ${{ env.GITHUB_RUN_NUMBER	 }}
         run: cd primary && yarn build:testing && cd ../ && cd secondary && yarn build:testing && cd ../
 
       - name: Clean up keychain
