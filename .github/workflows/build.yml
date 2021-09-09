@@ -48,7 +48,7 @@ jobs:
 
       - name: Build artifacts
         env:
-          BUILD_NUMBER: ${{ env.GITHUB_RUN_NUMBER	 }}
+          BUILD_NUMBER: ${{ github.run_number	 }}
         run: cd primary && yarn build:testing && cd ../ && cd secondary && yarn build:testing && cd ../
 
       - name: Clean up keychain
