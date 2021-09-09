@@ -60,17 +60,17 @@ jobs:
         with:
           name: rdc-artifacts
           path: |
-            primary/dist/**/*.dmg
-            primary/dist/**/*.exe
-            secondary/dist/**/*.dmg
-            secondary/dist/**/*.exe
+            primary/dist/*.dmg
+            primary/dist/*.exe
+            secondary/dist/*.dmg
+            secondary/dist/*.exe
 
       - name: Release artifacts
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            primary/dist/**/*.dmg
-            primary/dist/**/*.exe
-            secondary/dist/**/*.dmg
-            secondary/dist/**/*.exe
+            primary/dist/*.dmg
+            primary/dist/*.exe
+            secondary/dist/*.dmg
+            secondary/dist/*.exe
