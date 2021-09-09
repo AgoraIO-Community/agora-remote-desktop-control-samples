@@ -56,12 +56,17 @@ jobs:
         run: |
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: artifacts-${{ RUNNER_OS }}-${{ GITHUB_SHA }}
+          path: |
+            ${{ github.workspace }}/**/dist/*.dmg
+            ${{ github.workspace }}/**/dist/*.exe
+
       - name: Release artifacts
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            primary/dist/**/*.dmg
-            primary/dist/**/*.exe
-            secondary/dist/**/*.dmg
-            secondary/dist/**/*.exe
+            **/*.dmg
+            **/*.exe
