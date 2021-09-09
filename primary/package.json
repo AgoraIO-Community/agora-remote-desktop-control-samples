@@ -47,7 +47,7 @@
     "cross-env": "^7.0.3",
     "customize-cra": "^1.0.0",
     "electron": "^7.1.2",
-    "electron-builder": "^22.11.11",
+    "electron-builder": "^22.14.1",
     "react-app-rewired": "^2.1.8",
     "react-scripts": "^4.0.3",
     "rimraf": "^3.0.2",
