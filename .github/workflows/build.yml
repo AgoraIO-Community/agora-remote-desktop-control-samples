@@ -17,14 +17,10 @@ jobs:
           node-version: '14'
 
       - name: Install dependencies
-        run: |
-          cd primary && yarn install && cd ../
-          cd secondary && yarn install && cd ../
+        run: cd primary && yarn install && cd ../ && cd secondary && yarn install && cd ../
 
       - name: Build artifacts
-        run: |
-          cd primary && yarn build:testing && cd ../
-          cd secondary && yarn build:testing && cd ../
+        run: cd primary && yarn build:testing && cd ../ && cd secondary && yarn build:testing && cd ../
 
       - name: Release artifacts
         uses: softprops/action-gh-release@v1
