@@ -1,4 +1,4 @@
-name: secondary-ci
+name: primary-ci
 on: push
 
 jobs:
