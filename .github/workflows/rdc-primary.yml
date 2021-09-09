@@ -14,7 +14,6 @@ jobs:
       
       - uses: actions/upload-artifact@v2
         with:
-          name: agora-rdc-primary-$GITHUB_REF
           path: primary/dist/**/*.dmg
 
   build-windows:
@@ -30,5 +29,4 @@ jobs:
       
       - uses: actions/upload-artifact@v2
         with:
-          name: agora-rdc-primary-$GITHUB_REF
           path: primary/dist/**/*.exe
