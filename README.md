@@ -1,6 +1,7 @@
-Agora Remote Desktop Control Demos
+Agora Remote Desktop Control Samples
 ===================================
 
+> if you want to try this samples directly, please download samples from [here](https://github.com/AgoraIO-Community/agora-remote-desktop-control-samples/releases)
 ### Prerequisites
 
 1. Getting appId & certificate issued by agora, please read this [docs](https://docs.agora.io/en/Agora%20Platform/token#get-an-app-id)
@@ -16,7 +17,7 @@ $ npm set ELECTRON_MIRROR=http://npm.taobao.org/mirrors/electron/
 $ npm set ELECTRON_BUILDER_BINARIES_MIRROR=http://npm.taobao.org/mirrors/electron-builder-binaries/
 ```
 
-#### Clone our demos:
+#### Clone our samples:
 
 ```
 $ git clone git@github.com:AgoraIO-Community/agora-remote-desktop-control-samples.git
@@ -47,7 +48,7 @@ $ git clone git@github.com:AgoraIO-Community/agora-remote-desktop-control-sample
    $ yarn start
    ```
 
-#### Getting start with `primary`, which is our `HOST` end demo.
+#### Getting start with `primary`, which is our `HOST` end sample.
 1. cd to directory
    ```sh
    $ cd primary
@@ -64,7 +65,7 @@ $ git clone git@github.com:AgoraIO-Community/agora-remote-desktop-control-sample
    $ yarn start
    ```
 
-#### Getting start with `secondary`, which is our `CONTROLLED` end demo.
+#### Getting start with `secondary`, which is our `CONTROLLED` end sample.
 1. cd to directory
    ```sh
    $ cd secondary
