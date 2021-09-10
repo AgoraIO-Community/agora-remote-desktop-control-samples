@@ -11,8 +11,6 @@ const API_HOSTS = {
 module.exports = override(
   addWebpackExternals({
     'agora-rdc-core': 'commonjs2 agora-rdc-core',
-    'agora-rdc-electron': 'commonjs2 agora-rdc-electron',
-    'agora-rdc-webrtc-electron': 'commonjs2 agora-rdc-webrtc-electron',
     'agora-electron-sdk': 'commonjs2 agora-electron-sdk',
   }),
   addWebpackPlugin(

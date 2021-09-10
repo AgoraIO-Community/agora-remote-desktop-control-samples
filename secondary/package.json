@@ -74,6 +74,10 @@
   "build": {
     "extends": null,
     "asar": true,
+    "asarUnpack": [
+      "node_modules/agora-rdc-core/**/*",
+      "node_modules/agora-electron-sdk/**/*"
+    ],
     "afterPack": "./after-pack.js",
     "files": [
       "build/**/*",
