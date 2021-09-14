@@ -1,6 +1,9 @@
 Agora Remote Desktop Control Samples
 ===================================
 
+![build workflow](https://github.com/AgoraIO-Community/agora-remote-desktop-control-samples/actions/workflows/build.yml/badge.svg)
+
+
 > if you want to try this samples directly, please download samples from [here](https://github.com/AgoraIO-Community/agora-remote-desktop-control-samples/releases)
 ### Prerequisites
 
