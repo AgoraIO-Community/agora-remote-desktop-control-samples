@@ -11,6 +11,7 @@
     "url": "https://www.agora.io/"
   },
   "scripts": {
+    "update-electron": "node scripts/update-electron",
     "start": "concurrently \"cross-env BROWSER=none react-app-rewired start\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
     "build:testing": "yarn clean && cross-env TARGET=testing react-app-rewired build && tsc -p electron && electron-builder",
     "build:prod": "yarn clean && cross-env TARGET=production react-app-rewired build && tsc -p electron && electron-builder",
@@ -46,7 +47,7 @@
     "concurrently": "^6.2.0",
     "cross-env": "^7.0.3",
     "customize-cra": "^1.0.0",
-    "electron": "^7.1.2",
+    "electron": "7.1.2",
     "electron-builder": "22.11.11",
     "react-app-rewired": "^2.1.8",
     "react-scripts": "^4.0.3",
@@ -94,7 +95,7 @@
       "!**/{appveyor.yml,.travis.yml,circle.yml}",
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
-    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-${os}-${arch}.${ext}",
+    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-${os}-${arch}-electron-${env.ELECTRON_VERSION}.${ext}",
     "productName": "RDCPrimary",
     "appId": "io.agora.primary",
     "mac": {
