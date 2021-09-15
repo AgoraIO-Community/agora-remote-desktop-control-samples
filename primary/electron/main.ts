@@ -46,7 +46,6 @@ const createWindow = async () => {
   }
 };
 app.whenReady().then(createWindow);
-app.allowRendererProcessReuse = false;
 // app.disableHardwareAcceleration();
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
