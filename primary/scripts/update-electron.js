@@ -4,7 +4,7 @@ const pkg = require('../package.json');
 
 const PKG_PATH = path.resolve(__dirname, '../package.json');
 
-const ELECTRON_VERSION = process.env.ELECTRON_VERSION ?? '7.1.2';
+const ELECTRON_VERSION = (process.env.ELECTRON_VERSION ?? '7.1.2').replace('electron-', '');
 
 pkg.devDependencies['electron'] = ELECTRON_VERSION;
 pkg.agora_electron.electron_version = ELECTRON_VERSION;
