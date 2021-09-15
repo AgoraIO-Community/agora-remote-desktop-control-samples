@@ -26,8 +26,8 @@ jobs:
         env:
           ELECTRON_VERSION: ${{ matrix.electron }}
         run: |
-          cd primary && yarn update-electron && yarn install
-          cd secondary && yarn update-electron && yarn install
+          cd primary && yarn update-electron && yarn install && cd ../
+          cd secondary && yarn update-electron && yarn install && cd ../
 
       - name: Install the Apple certificate
         if: ${{ matrix.os == 'macos-latest' }}
