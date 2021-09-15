@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
-        electron: [electron-6.1.7, electron-7.1.2, electron-9.0.0, electron-10.2.0, electron-11.0.0, electron-12.0.0]
+        electron: [electron-7.1.2, electron-9.0.0, electron-10.2.0, electron-11.0.0, electron-12.0.0]
 
     steps:
       - uses: actions/checkout@v2
