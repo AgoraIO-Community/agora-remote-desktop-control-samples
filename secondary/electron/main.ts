@@ -2,6 +2,9 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron';
 // import { autoUpdater } from "electron-updater";
 import logger from 'electron-log';
 import ora from 'ora';
+import registerHandlers from 'agora-rdc-webrtc-electron/lib/electron/registerHandlers'
+
+registerHandlers();
 
 const __DEV__ = process.env.NODE_ENV === 'development';
 
@@ -56,8 +59,4 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
-});
-
-ipcMain.handle('getAllDisplays', async () => {
-  return await screen.getAllDisplays();
 });
