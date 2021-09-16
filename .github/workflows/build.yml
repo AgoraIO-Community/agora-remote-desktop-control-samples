@@ -65,7 +65,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: rdc-${{ matrix.app }}-${{github.runner_os}}-${{ matrix.electron }}
+          name: rdc-${{ matrix.app }}-${{ github.runner_os }}-${{ matrix.electron }}
           path: |
             primary/dist/*.dmg
             primary/dist/*.exe
