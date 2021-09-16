@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
-        electron: [electron-7.1.2, electron-9.0.0, electron-10.2.0, electron-11.0.0, electron-12.0.0]
+        electron: [7.1.2, 9.0.0, 10.2.0, 11.0.0, 12.0.0]
         app: ['primary', secondary]
 
     steps:
@@ -65,7 +65,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: rdc-${{ matrix.app }}-${{ github.runner_os }}-${{ matrix.electron }}
+          name: rdc-${{ matrix.app }}-electron-${{ matrix.electron }}-${{ env.RUNNER_OS }}
           path: |
             primary/dist/*.dmg
             primary/dist/*.exe
