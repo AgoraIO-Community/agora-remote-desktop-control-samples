@@ -99,6 +99,7 @@
     "productName": "RDCSecondary",
     "appId": "io.agora.secondary",
     "mac": {
+      "target": "dmg",
       "category": "io.agora.metis.category.type",
       "entitlements": "entitlements.mac.plist",
       "hardenedRuntime": true
