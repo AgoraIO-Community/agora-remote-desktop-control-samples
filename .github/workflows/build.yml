@@ -65,7 +65,7 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: rdc-${{ matrix.app }}-electron-${{ matrix.electron }}-${{ env.RUNNER_OS }}
+          name: rdc-${{ matrix.app }}-electron-${{ matrix.electron }}-${{ runner.os }}
           path: |
             primary/dist/*.dmg
             primary/dist/*.exe
