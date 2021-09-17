@@ -28,6 +28,7 @@ const createWindow = async () => {
       webSecurity: false,
       nodeIntegration: true,
       enableRemoteModule: true,
+      contextIsolation: false,
     },
   });
   if (__DEV__) {
