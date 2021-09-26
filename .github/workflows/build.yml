@@ -9,7 +9,6 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest]
         electron: [7.1.2, 9.0.0, 10.2.0, 11.4.10, 12.0.0]
-        app: ['primary', secondary]
 
     steps:
       - uses: actions/checkout@v2
@@ -27,7 +26,7 @@ jobs:
         env:
           ELECTRON_VERSION: ${{ matrix.electron }}
         run: |
-          cd ${{ matrix.app }} && yarn update-electron && yarn install
+          cd rdc-client && yarn update-electron && yarn install
 
       - name: Install the Apple certificate
         if: ${{ matrix.os == 'macos-latest' }}
@@ -56,7 +55,7 @@ jobs:
           BUILD_NUMBER: ${{ github.run_number	 }}
           ELECTRON_VERSION: ${{ matrix.electron }}
         run: |
-          cd ${{ matrix.app }} && yarn build:testing
+          cd rdc-client && yarn build:testing
 
       - name: Clean up keychain
         if: ${{ matrix.os == 'macos-latest' }}
@@ -65,19 +64,15 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: rdc-${{ matrix.app }}-electron-${{ matrix.electron }}-${{ runner.os }}
+          name: rdc-client-electron-${{ matrix.electron }}-${{ runner.os }}
           path: |
-            primary/dist/*.dmg
-            primary/dist/*.exe
-            secondary/dist/*.dmg
-            secondary/dist/*.exe
+            rdc-client/dist/*.dmg
+            rdc-client/dist/*.exe
 
       - name: Release artifacts
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            primary/dist/*.dmg
-            primary/dist/*.exe
-            secondary/dist/*.dmg
-            secondary/dist/*.exe
+            rdc-client/dist/*.dmg
+            rdc-client/dist/*.exe
