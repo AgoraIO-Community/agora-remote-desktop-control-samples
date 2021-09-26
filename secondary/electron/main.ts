@@ -1,8 +1,19 @@
-import { app, BrowserWindow, ipcMain, screen } from 'electron';
+import { app, BrowserWindow } from 'electron';
 // import { autoUpdater } from "electron-updater";
 import logger from 'electron-log';
 import ora from 'ora';
-import registerHandlers from 'agora-rdc-webrtc-electron/lib/electron/registerHandlers'
+import registerHandlers from 'agora-rdc-webrtc-electron/lib/electron/registerHandlers';
+
+import childProcess from 'child_process';
+
+const killZombies = () => {
+  if (process.platform == 'darwin') {
+    childProcess.exec('killall VideoSource', (error) => console.log(error));
+  }
+  if (process.platform == 'win32') {
+    childProcess.exec('taskkill /F /IM VideoSource.exe', (error) => console.log(error));
+  }
+};
 
 registerHandlers();
 
@@ -52,6 +63,7 @@ const createWindow = async () => {
 app.whenReady().then(createWindow);
 app.allowRendererProcessReuse = false;
 app.on('window-all-closed', () => {
+  killZombies();
   if (process.platform !== 'darwin') {
     app.quit();
   }
