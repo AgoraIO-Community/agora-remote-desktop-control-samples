@@ -12,7 +12,7 @@ import { UserOutlined } from '@ant-design/icons';
 import qs from 'querystring';
 import RDC from './RDC';
 import './index.css';
-import { Options } from '../../interfaces';
+import { HostOptions } from '../../interfaces';
 
 const isMacOS = navigator.platform.toLowerCase().indexOf('mac') >= 0;
 
@@ -76,7 +76,7 @@ const Session: FC = () => {
       return;
     }
     const { opts } = qs.parse(location.search.replace('?', '')) as { opts: string };
-    const options: Partial<Options> = opts ? JSON.parse(atob(opts)) : {};
+    const options: Partial<HostOptions> = opts ? JSON.parse(atob(opts)) : {};
     const { appId } = value.data;
     if (options.rtcSDK === 'electron') {
       const rtcEngine = new AgoraRtcEngine();

@@ -1,5 +1,5 @@
 {
-  "name": "secondary",
+  "name": "rdc-client",
   "version": "0.1.8",
   "private": true,
   "license": "MIT",
@@ -12,7 +12,7 @@
   },
   "scripts": {
     "update-electron": "node scripts/update-electron",
-    "start": "concurrently \"cross-env BROWSER=none PORT=3001 react-app-rewired start\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
+    "start": "concurrently \"cross-env BROWSER=none react-app-rewired start\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
     "build:testing": "yarn clean && cross-env TARGET=testing react-app-rewired build && tsc -p electron && electron-builder",
     "build:prod": "yarn clean && cross-env TARGET=production react-app-rewired build && tsc -p electron && electron-builder",
     "clean": "rimraf ./build ./dist"
@@ -96,11 +96,10 @@
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
     "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-electron-${env.ELECTRON_VERSION}-${os}-${arch}.${ext}",
-    "productName": "RDCSecondary",
-    "appId": "io.agora.secondary",
+    "productName": "RDCClient",
+    "appId": "io.agora.rdc-client",
     "mac": {
       "target": "dmg",
-      "category": "io.agora.metis.category.type",
       "entitlements": "entitlements.mac.plist",
       "hardenedRuntime": true
     },

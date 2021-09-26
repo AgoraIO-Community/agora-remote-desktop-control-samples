@@ -12,7 +12,7 @@ import qs from 'querystring';
 import { fetchSession } from '../../api';
 import { RESOLUTION_BITRATE } from '../../constants';
 import './index.css';
-import { Options } from '../../interfaces';
+import { ControlledOptions } from '../../interfaces';
 
 const isMacOS = navigator.platform.toLowerCase().indexOf('mac') >= 0;
 
@@ -75,7 +75,7 @@ const Session: FC = () => {
       return;
     }
     const { opts } = qs.parse(location.search.replace('?', '')) as { opts: string };
-    const options: Partial<Options> = opts ? JSON.parse(atob(opts)) : {};
+    const options: Partial<ControlledOptions> = opts ? JSON.parse(atob(opts)) : {};
     const { appId } = value.data;
 
     if (options.rtcSDK === 'electron') {
@@ -140,7 +140,7 @@ const Session: FC = () => {
       return;
     }
     const { opts } = qs.parse(location.search.replace('?', '')) as { opts: string };
-    const { resolutionBitrate, frameRate }: Partial<Options> = opts ? JSON.parse(atob(opts)) : {};
+    const { resolutionBitrate, frameRate }: Partial<ControlledOptions> = opts ? JSON.parse(atob(opts)) : {};
     const captureParams: Partial<RDCDisplayConfiguration> = { frameRate };
     if (resolutionBitrate) {
       const { width, height, bitrate } = RESOLUTION_BITRATE[resolutionBitrate];
