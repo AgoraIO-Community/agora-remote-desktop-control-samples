@@ -51,10 +51,10 @@ $ git clone git@github.com:AgoraIO-Community/agora-remote-desktop-control-sample
    $ yarn start
    ```
 
-#### Getting start with `primary`, which is our `HOST` end sample.
+#### Getting start with `rdc-client`
 1. cd to directory
    ```sh
-   $ cd primary
+   $ cd rdc-client
    ```
 
 2. Install dependencies
@@ -62,24 +62,6 @@ $ git clone git@github.com:AgoraIO-Community/agora-remote-desktop-control-sample
    $ yarn install
    ```
 3. please modify ip address of [config-overrides.js](primary/config-overrides.js) which is rdc-server running on.
-
-4. Happy hacking
-   ```sh
-   $ yarn start
-   ```
-
-#### Getting start with `secondary`, which is our `CONTROLLED` end sample.
-1. cd to directory
-   ```sh
-   $ cd secondary
-   ```
-   
-2. Install dependencies
-   ```sh
-   $ yarn install
-   ```
-
-3. please modify ip address of [config-overrides.js](secondary/config-overrides.js) which is rdc-server running on.
 
 4. Happy hacking
    ```sh
