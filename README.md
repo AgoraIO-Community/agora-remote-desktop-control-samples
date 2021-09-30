@@ -61,7 +61,7 @@ $ git clone git@github.com:AgoraIO-Community/agora-remote-desktop-control-sample
    ```sh
    $ yarn install
    ```
-3. please modify ip address of [config-overrides.js](primary/config-overrides.js) which is rdc-server running on.
+3. please modify ip address of [config-overrides.js](rdc-client/config-overrides.js) which is rdc-server running on.
 
 4. Happy hacking
    ```sh
