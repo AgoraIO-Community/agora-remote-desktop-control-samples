@@ -71,7 +71,7 @@ $ git clone git@github.com:AgoraIO-Community/agora-remote-desktop-control-sample
 #### Build `rdc-client` artifact
 
 1. modifying `testing` property in `API_HOSTS` of [config-overrides.js](rdc-client/config-overrides.js), which is rdc-server deployed host.
-2. settle down environment variables, cause our CI is needed dynamically updating ELECTRON_VERSION & BUILD_NUMBER. Or you can remove `artifactName` property in `build` of [package.json](rdc-client/package.jon) to skip this step. 
+2. settle down environment variables, cause our CI is needed dynamically updating ELECTRON_VERSION & BUILD_NUMBER. Or you can remove `artifactName` property in `build` of [package.json](rdc-client/package.json) to skip this step. 
    ```sh
    $ export ELECTRON_VERSION=7.1.2
    $ export BUILD_NUMBER=0
