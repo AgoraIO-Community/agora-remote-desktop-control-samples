@@ -1,5 +1,5 @@
 import React, { useEffect, useState, FC, useCallback } from 'react';
-import { RDCRoleType } from 'agora-rdc-core';
+import { RDCRemotePasteCodes, RDCRemotePastePayload, RDCRemotePasteStatus, RDCRoleType } from 'agora-rdc-core';
 import { AgoraRemoteDesktopControl as RDCEngineWithElectronRTC } from 'agora-rdc-electron';
 import { AgoraRemoteDesktopControl as RDCEngineWithWebRTC } from 'agora-rdc-webrtc-electron';
 import AgoraRtcEngine from 'agora-electron-sdk';
@@ -38,6 +38,24 @@ const Session: FC = () => {
     },
     [joinedRdcUids, setJoinedRdcUids],
   );
+
+  const handleRemotePaste = useCallback((payload: RDCRemotePastePayload) => {
+    if (payload.code === RDCRemotePasteCodes.SUCCEEDED && payload.status === RDCRemotePasteStatus.STARTING) {
+      message.loading({
+        key: 'rdc-remote-pasting',
+        content: 'File is pasting...',
+      });
+    }
+    if (payload.code === RDCRemotePasteCodes.SUCCEEDED && payload.status === RDCRemotePasteStatus.SUCCEEDED) {
+      message.success('File is pasted.');
+      message.destroy('rdc-remote-pasting');
+    }
+
+    if (payload.code !== RDCRemotePasteCodes.SUCCEEDED && payload.status === RDCRemotePasteStatus.FAILED) {
+      message.error('Failed to pasting file.');
+      message.destroy('rdc-remote-pasting');
+    }
+  }, []);
 
   const handleScreenStreamLeaved = useCallback(
     (uid) => {
@@ -131,12 +149,14 @@ const Session: FC = () => {
     rdcEngine.on('rdc-request-control-authorized', handleRequestControlAuthorized);
     rdcEngine.on('rdc-request-control-unauthorized', handleRequestControlUnauthorized);
     rdcEngine.on('rdc-quit-control', handleQuitControlEvent);
+    rdcEngine.on('rdc-remote-paste', handleRemotePaste);
     return () => {
       rdcEngine.off('rdc-screen-stream-joined', handleScreenStreamJoined);
       rdcEngine.off('rdc-screen-stream-leave', handleScreenStreamLeaved);
       rdcEngine.off('rdc-request-control-authorized', handleRequestControlAuthorized);
       rdcEngine.off('rdc-request-control-unauthorized', handleRequestControlUnauthorized);
       rdcEngine.off('rdc-quit-control', handleQuitControlEvent);
+      rdcEngine.off('rdc-remote-paste', handleRemotePaste);
     };
   }, [
     handleQuitControlEvent,
