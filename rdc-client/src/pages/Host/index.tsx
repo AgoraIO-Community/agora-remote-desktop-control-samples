@@ -164,6 +164,7 @@ const Session: FC = () => {
     handleRequestControlUnauthorized,
     handleScreenStreamJoined,
     handleScreenStreamLeaved,
+    handleRemotePaste,
     rdcEngine,
   ]);
 
