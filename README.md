@@ -68,7 +68,7 @@ $ git clone git@github.com:AgoraIO-Community/agora-remote-desktop-control-sample
    $ yarn start
    ```
 
-### Build `rdc-client` artifact
+#### Build `rdc-client` artifact
 
 1. modifying `testing` property in `API_HOSTS` of [config-overrides.js](rdc-client/config-overrides.js), which is rdc-server deployed host.
 2. settle down environment variables, cause our CI is needed dynamically updating ELECTRON_VERSION & BUILD_NUMBER. Or you can remove `artifactName` property in `build` of [package.json](rdc-client/package.jon) to skip this step. 
