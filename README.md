@@ -67,6 +67,20 @@ $ git clone git@github.com:AgoraIO-Community/agora-remote-desktop-control-sample
    ```sh
    $ yarn start
    ```
+
+### Build `rdc-client` artifact
+
+1. modifying `testing` property in `API_HOSTS` of [config-overrides.js](rdc-client/config-overrides.js), which is rdc-server deployed host.
+2. settle down environment variables, cause our CI is needed dynamically updating ELECTRON_VERSION & BUILD_NUMBER. Or you can remove `artifactName` property in `build` of [package.json](rdc-client/package.jon) to skip this step. 
+   ```sh
+   $ export ELECTRON_VERSION=7.1.2
+   $ export BUILD_NUMBER=0
+   ```
+3. build artifact
+   ```sh
+   $ yarn build:testing
+   ```
+
 ### `uid` definition agreement:
 
 Since the end users taking dual-process to publish dual video streams at the same time, in order to facilitate the management of the video streams, here is an agreement on the uid (user's id):
