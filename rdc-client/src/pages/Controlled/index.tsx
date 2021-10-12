@@ -148,7 +148,7 @@ const Session: FC = () => {
     return () => window.removeEventListener('beforeunload', handleBeforeunload);
   }, [rdcEngine, handleBeforeunload]);
 
-  const handleAuthorize = (display: RDCDisplay) => {
+  const handleAuthorize = useCallback((display: RDCDisplay) => {
     const profile = profiles.find((profile) => profile.userId === userIdControlledBy);
     if (!userIdControlledBy || !rdcEngine || !profile) {
       return;
@@ -170,10 +170,12 @@ const Session: FC = () => {
       duration: 0,
       key: profile.userId,
     });
-  };
+  }, [location.search, profiles, rdcEngine, userIdControlledBy]);
 
-  const declineRequest = () => {
-    const profile = profiles.find((profile) => profile.userId === userIdControlledBy);
+  const declineRequest = useCallback(() => {
+    const profile = profiles.find((profile) => {
+      return  profile.userId === userIdControlledBy;
+    });
     if (!profile) {
       return;
     }
@@ -182,9 +184,9 @@ const Session: FC = () => {
     message.info(`You have been declined control request from ${profile.name}`);
     setUserIdControlledBy(undefined);
     setControlled(false);
-  };
+  }, [profiles, rdcEngine, userIdControlledBy]);
 
-  const handleStopControl = () => {
+  const handleStopControl = useCallback(() => {
     const profile = profiles.find((profile) => profile.userId === userIdControlledBy);
     if (!rdcEngine || !profile) {
       return;
@@ -195,7 +197,7 @@ const Session: FC = () => {
     message.info(`You have stopped control by ${profile.name}.`);
     setUserIdControlledBy(undefined);
     setControlled(false);
-  };
+  }, [profiles, rdcEngine, userIdControlledBy]);
 
   return (
     <div className="secondary-rdc">
