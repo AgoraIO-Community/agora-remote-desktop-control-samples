@@ -1,37 +1,38 @@
-import axios from 'axios';
 import { RDCRoleType } from 'agora-rdc-core';
+import axios, { AxiosResponse } from 'axios';
 
 declare const API_HOST: string;
 
-export interface JoinSession {
-  uid: number;
-}
-
-export interface RTCAuthorization {
-  uid: number;
-  token: string;
-}
-
-export interface RDCAuthorization {
-  uid: number;
-  tokens: {
-    rtc: string;
-    rtm: string;
-  };
-}
-export interface Session {
+export interface JoinSessionParams {
   channel: string;
-  username: string;
-  appId: string;
-  expiredAt: number;
-  rtc: RTCAuthorization;
-  rdc: RDCAuthorization;
+  name: string;
+  role: RDCRoleType;
 }
 
-export const joinSession = (channel: string, role: RDCRoleType) =>
-  axios.post<JoinSession>(`${API_HOST}/api/session`, {
-    channel,
-    role,
-  });
+export interface JoinedSession {
+  userId: number;
+}
 
-export const fetchSession = (uid: string) => axios.get<Session>(`${API_HOST}/api/session/${uid}`);
+export interface Profile {
+  userId: string;
+  screenStreamId: number;
+  cameraStreamId: number;
+  name: string;
+  rdcRole: RDCRoleType;
+}
+
+export interface Session extends Profile {
+  appId: string;
+  channel: string;
+  userToken: string;
+  screenStreamToken: string;
+  cameraStreamToken: string;
+  expiredAt: number;
+}
+
+export const joinSession = (prams: JoinSessionParams) =>
+  axios.post<JoinSessionParams, AxiosResponse<JoinedSession>>(`${API_HOST}/api/session`, prams);
+
+export const fetchSession = (userId: string) => axios.get<Session>(`${API_HOST}/api/session/${userId}`);
+
+export const fetchProfiles = (userId: string) => axios.get<Profile[]>(`${API_HOST}/api/session/${userId}/profiles`);

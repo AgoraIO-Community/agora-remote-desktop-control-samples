@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { SessionService, RoleType } from './session.service';
+import { SessionService, RDCRoleType } from './session.service';
 
 export class CreateSessionParams {
   channel: string;
-  role: RoleType;
+  role: RDCRoleType;
+  name: string
 }
 
 @Controller('/session')
@@ -11,14 +12,19 @@ export class SessionController {
   constructor(private readonly sessionService: SessionService) {}
 
   @Post()
-  async joinSession(@Body() { channel, role }: CreateSessionParams) {
+  async joinSession(@Body() { channel, role , name}: CreateSessionParams) {
     return {
-      uid: await this.sessionService.joinSession(channel, role),
+      userId: await this.sessionService.joinSession(channel, role, name),
     };
   }
 
-  @Get('/:uid')
-  async getSession(@Param('uid') uid: string) {
-    return this.sessionService.getSession(parseInt(uid));
+  @Get('/:userId')
+  async getSession(@Param('userId') userId: string) {
+    return this.sessionService.getSession(userId);
+  }
+
+  @Get('/:userId/profiles')
+  async getProfiles(@Param('userId') userId: string) {
+    return this.sessionService.getProfiles(userId);
   }
 }

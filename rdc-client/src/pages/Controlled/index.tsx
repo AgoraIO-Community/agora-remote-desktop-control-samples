@@ -9,7 +9,7 @@ import { useAsync } from 'react-use';
 import { Affix, Button, message, Modal, Popconfirm, Tabs } from 'antd';
 import { PoweroffOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import qs from 'querystring';
-import { fetchSession } from '../../api';
+import { fetchProfiles, fetchSession } from '../../api';
 import { RESOLUTION_BITRATE } from '../../constants';
 import './index.css';
 import { ControlledOptions } from '../../interfaces';
@@ -19,25 +19,32 @@ const isMacOS = navigator.platform.toLowerCase().indexOf('mac') >= 0;
 const LOG_FOLDER = isMacOS ? `${window.process.env.HOME}/Library/Logs/RDCSecondary` : '.';
 
 const Session: FC = () => {
+  const { userId } = useParams<{ userId: string }>();
   const location = useLocation();
-  const { uid } = useParams<{ uid: string; opts?: string }>();
-  const { value } = useAsync(() => fetchSession(uid), [uid]);
+  const sessionState = useAsync(() => fetchSession(userId), [userId]);
+  const profilesState = useAsync(() => fetchProfiles(userId), [userId]);
   const [rtcEngine, setRtcEngine] = useState<AgoraRtcEngine | IAgoraRTCClient | undefined>();
   const [rdcEngine, setRDCEngine] = useState<RDCEngineWithElectronRTC | RDCEngineWithWebRTC | undefined>();
-  const [displays, setDisplays] = useState<RDCDisplay[]>([]);
-  const [controlledById, setControlledById] = useState<number>();
-  const [controlled, setControlled] = useState<boolean>(false);
   const [visible, setVisible] = useState(false);
   const [activeKey, setActiveKey] = useState<string>();
+  const [displays, setDisplays] = useState<RDCDisplay[]>([]);
+  const [userIdControlledBy, setUserIdControlledBy] = useState<string>();
+  const [controlled, setControlled] = useState<boolean>(false);
+
+  const channel = sessionState.value?.data.channel;
+  const session = sessionState.value?.data;
+  const profiles = profilesState.value?.data ?? [];
+  const { opts } = qs.parse(location.search.replace('?', '')) as { opts: string };
+  const options: Partial<ControlledOptions> = opts ? JSON.parse(atob(opts)) : {};
 
   const handleRequestControl = useCallback(
-    (uid: number) => {
+    (userId: string) => {
       if (!rdcEngine) {
         return;
       }
       rdcEngine.getDisplays().then((displays) => {
         setDisplays(displays);
-        setControlledById(uid);
+        setUserIdControlledBy(userId);
         setVisible(true);
       });
     },
@@ -45,38 +52,40 @@ const Session: FC = () => {
   );
 
   const handleQuitControl = useCallback(
-    (uid: number) => {
-      if (!rdcEngine) {
+    (userId: string) => {
+      if (!rdcEngine || !profiles) {
         return;
       }
-      rdcEngine.quitControl(uid);
-      message.destroy(uid);
-      message.info(`${uid} Release control.`);
-      setControlledById(undefined);
+      const profile = profiles.find((p) => p.userId === userId);
+      if (!profile) {
+        return;
+      }
+      rdcEngine.quitControl(userId, profile.rdcRole);
+      message.destroy(userId);
+      message.info(`${profile.name} is released control.`);
+      setUserIdControlledBy(undefined);
       setControlled(false);
     },
-    [rdcEngine],
+    [rdcEngine, profiles],
   );
 
   const handleBeforeunload = useCallback(() => {
-    if (!rdcEngine) {
+    const profile = profiles.find((profile) => profile.userId === userIdControlledBy);
+    if (!rdcEngine || !userIdControlledBy || !profile) {
       return;
     }
-    if (controlledById) {
-      rdcEngine.quitControl(controlledById);
-    }
+
+    rdcEngine.quitControl(profile.userId, profile.rdcRole);
     rdcEngine.leave();
     // rdcEngine.dispose();
-  }, [rdcEngine, controlledById]);
+  }, [rdcEngine, userIdControlledBy]);
 
   // Initialize Engine
   useEffect(() => {
-    if (!value || !location) {
+    if (!session || !location) {
       return;
     }
-    const { opts } = qs.parse(location.search.replace('?', '')) as { opts: string };
-    const options: Partial<ControlledOptions> = opts ? JSON.parse(atob(opts)) : {};
-    const { appId } = value.data;
+    const { appId } = session;
 
     if (options.rtcSDK === 'electron') {
       const rtcEngine = new AgoraRtcEngine();
@@ -100,22 +109,26 @@ const Session: FC = () => {
       setRtcEngine(rtcEngine);
       setRDCEngine(rdcEngine);
     }
-  }, [value, location]);
+  }, [session, location]);
 
   // Join Channel
   useEffect(() => {
-    if (!value || !rdcEngine || !rtcEngine) {
+    if (!session || !rdcEngine || !rtcEngine) {
       return;
     }
-    const { channel, rdc, rtc } = value.data;
-    rdcEngine.join(rdc.uid, channel, rdc.tokens.rtc, rdc.tokens.rtm);
-    if (rtcEngine instanceof AgoraRtcEngine) {
+    const { userId, userToken, channel, screenStreamId, screenStreamToken, cameraStreamId, cameraStreamToken } =
+      session;
+    rdcEngine.join(userId, userToken, channel, screenStreamId, screenStreamToken);
+    if (options.rtcSDK === 'electron' && rtcEngine instanceof AgoraRtcEngine) {
       rtcEngine.setChannelProfile(0);
       rtcEngine.setClientRole(1);
       rtcEngine.enableVideo();
-      rtcEngine.joinChannel(rtc.token, channel, '', rtc.uid);
+      rtcEngine.joinChannel(cameraStreamToken, channel, '', cameraStreamId);
     }
-  }, [value, rdcEngine, rtcEngine]);
+    if (options.rtcSDK === 'web') {
+      // TODO: implements
+    }
+  }, [session, rdcEngine, rtcEngine]);
 
   // Handle Events
   useEffect(() => {
@@ -133,10 +146,11 @@ const Session: FC = () => {
   useEffect(() => {
     window.addEventListener('beforeunload', handleBeforeunload);
     return () => window.removeEventListener('beforeunload', handleBeforeunload);
-  }, [rdcEngine, controlledById, handleBeforeunload]);
+  }, [rdcEngine, handleBeforeunload]);
 
   const handleAuthorize = (display: RDCDisplay) => {
-    if (!controlledById || !rdcEngine) {
+    const profile = profiles.find((profile) => profile.userId === userIdControlledBy);
+    if (!userIdControlledBy || !rdcEngine || !profile) {
       return;
     }
     const { opts } = qs.parse(location.search.replace('?', '')) as { opts: string };
@@ -148,36 +162,38 @@ const Session: FC = () => {
       captureParams.height = height;
       captureParams.bitrate = bitrate;
     }
-    rdcEngine.authorizeControl(controlledById, display, captureParams);
+    rdcEngine.authorizeControl(userIdControlledBy, display, captureParams);
     setVisible(false);
     setControlled(true);
     message.warn({
-      content: `Your computer is controlled by ${controlledById}`,
+      content: `Your computer is controlled by ${profile.name}`,
       duration: 0,
-      key: controlledById,
+      key: profile.userId,
     });
   };
 
   const declineRequest = () => {
-    if (!controlledById) {
+    const profile = profiles.find((profile) => profile.userId === userIdControlledBy);
+    if (!profile) {
       return;
     }
     setVisible(false);
-    rdcEngine?.unauthorizeControl(controlledById);
-    message.info(`You have been declined control request from ${controlledById}`);
-    setControlledById(undefined);
+    rdcEngine?.unauthorizeControl(profile.userId);
+    message.info(`You have been declined control request from ${profile.name}`);
+    setUserIdControlledBy(undefined);
     setControlled(false);
   };
 
   const handleStopControl = () => {
-    if (!rdcEngine || !controlledById) {
+    const profile = profiles.find((profile) => profile.userId === userIdControlledBy);
+    if (!rdcEngine || !profile) {
       return;
     }
 
-    rdcEngine.quitControl(controlledById);
-    message.destroy(controlledById);
-    message.info(`You have stopped control by ${controlledById}.`);
-    setControlledById(undefined);
+    rdcEngine.quitControl(profile.userId, profile.rdcRole);
+    message.destroy(profile.userId);
+    message.info(`You have stopped control by ${profile.name}.`);
+    setUserIdControlledBy(undefined);
     setControlled(false);
   };
 
@@ -201,8 +217,7 @@ const Session: FC = () => {
           ))}
         </Tabs>
       </Modal>
-      {value?.data.channel ? <div className="channel">CHANNEL: {value?.data.channel}</div> : null}
-      {controlledById && controlled ? (
+      {userIdControlledBy && controlled ? (
         <Affix style={{ position: 'absolute', top: 8, right: 8 }}>
           <Popconfirm
             onConfirm={handleStopControl}
@@ -215,6 +230,7 @@ const Session: FC = () => {
           </Popconfirm>
         </Affix>
       ) : null}
+      {channel ? <div className="channel">CHANNEL: {channel}</div> : null}
     </div>
   );
 };

@@ -6,11 +6,12 @@ import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
 import { useThrottleFn } from 'react-use';
 
 export interface RDCProps {
-  cUid: number;
+  userId: string;
+  streamId: number;
   rdcEngine?: RDCEngineWithElectronRTC | RDCEngineWithWebRTC;
 }
 
-const RDC: FC<RDCProps> = ({ cUid, rdcEngine }) => {
+const RDC: FC<RDCProps> = ({ userId, streamId, rdcEngine }) => {
   const attachRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullScreen] = useState<boolean>();
   const [[width, height], setSize] = useState<[number, number]>([window.innerWidth, window.innerHeight - 56]);
@@ -20,10 +21,10 @@ const RDC: FC<RDCProps> = ({ cUid, rdcEngine }) => {
 
   useEffect(() => {
     if (rdcEngine && attachRef && attachRef.current) {
-      rdcEngine.takeControl(cUid, attachRef.current);
+      rdcEngine.takeControl(userId, streamId, attachRef.current);
       rdcEngine.on('rdc-fullscreen-change', (iFS) => setIsFullScreen(iFS));
     }
-  }, [cUid, rdcEngine, attachRef]);
+  }, [userId, streamId, rdcEngine, attachRef]);
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);

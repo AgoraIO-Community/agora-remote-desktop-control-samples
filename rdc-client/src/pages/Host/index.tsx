@@ -1,11 +1,11 @@
-import React, { useEffect, useState, FC, useCallback } from 'react';
+import React, { useEffect, useState, FC, useCallback, Profiler } from 'react';
 import { RDCRemotePasteCodes, RDCRemotePastePayload, RDCRemotePasteStatus, RDCRoleType } from 'agora-rdc-core';
 import { AgoraRemoteDesktopControl as RDCEngineWithElectronRTC } from 'agora-rdc-electron';
 import { AgoraRemoteDesktopControl as RDCEngineWithWebRTC } from 'agora-rdc-webrtc-electron';
 import AgoraRtcEngine from 'agora-electron-sdk';
-import AgoraRTC, { IAgoraRTCClient } from 'agora-rtc-sdk-ng';
+import AgoraRTC, { IAgoraRTCClient, IAgoraRTCRemoteUser } from 'agora-rtc-sdk-ng';
 import { useParams, useLocation } from 'react-router-dom';
-import { fetchSession } from '../../api';
+import { fetchProfiles, fetchSession } from '../../api';
 import { useAsync } from 'react-use';
 import { Affix, Button, Divider, Drawer, List, message, Tabs } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
@@ -19,24 +19,37 @@ const isMacOS = navigator.platform.toLowerCase().indexOf('mac') >= 0;
 const LOG_FOLDER = isMacOS ? `${window.process.env.HOME}/Library/Logs/RDCPrimary` : '.';
 
 const Session: FC = () => {
-  const { uid } = useParams<{ uid: string }>();
+  const { userId } = useParams<{ userId: string }>();
   const location = useLocation();
   const [visible, setVisible] = useState(true);
-  const { value } = useAsync(() => fetchSession(uid), [uid]);
-  const [joinedRdcUids, setJoinedRdcUids] = useState<number[]>([]);
-  const [controlledUids, setControlledUids] = useState<number[]>([]);
+  const sessionState = useAsync(() => fetchSession(userId), [userId]);
+  const profilesState = useAsync(() => fetchProfiles(userId), [userId]);
   const [rtcEngine, setRtcEngine] = useState<AgoraRtcEngine | IAgoraRTCClient | undefined>();
   const [rdcEngine, setRDCEngine] = useState<RDCEngineWithElectronRTC | RDCEngineWithWebRTC | undefined>();
+  const [userIdsUnderControl, setUserIdsUnderControl] = useState<string[]>([]);
+  const [screenStreamIds, setScreenStreamIds] = useState<number[]>([]);
 
-  const handleScreenStreamJoined = useCallback(
-    (uid) => {
-      if (joinedRdcUids.includes(uid)) {
-        return;
-      }
-      message.info(`${uid} has been joined session.`);
-      setJoinedRdcUids([...joinedRdcUids, uid]);
-    },
-    [joinedRdcUids, setJoinedRdcUids],
+  const channel = sessionState.value?.data.channel;
+  const session = sessionState.value?.data;
+  const profiles = profilesState.value?.data ?? [];
+  const { opts } = qs.parse(location.search.replace('?', '')) as { opts: string };
+  const options: Partial<HostOptions> = opts ? JSON.parse(atob(opts)) : {};
+
+  const handleRequestControlAuthorized = useCallback(
+    (userId: string) => setUserIdsUnderControl([...userIdsUnderControl, userId]),
+    [userIdsUnderControl, setUserIdsUnderControl],
+  );
+
+  const handleRequestControlUnauthorized = useCallback((userId: string) => {
+    const profile = profiles.find((p) => p.userId === userId);
+    if (profile) {
+      message.warn(`${profile.name} is declined your request`);
+    }
+  }, []);
+
+  const handleQuitControlEvent = useCallback(
+    (userId: string) => setUserIdsUnderControl(userIdsUnderControl.filter((userIdUC) => userIdUC !== userId)),
+    [userIdsUnderControl, setUserIdsUnderControl],
   );
 
   const handleRemotePaste = useCallback((payload: RDCRemotePastePayload) => {
@@ -57,45 +70,48 @@ const Session: FC = () => {
     }
   }, []);
 
-  const handleScreenStreamLeaved = useCallback(
-    (uid) => {
-      setJoinedRdcUids(joinedRdcUids.filter((jUid) => jUid !== uid));
-      message.info(`${uid} has been leaved session.`);
+  const handleStreamJoined = useCallback(
+    (streamIdentifier: number | IAgoraRTCRemoteUser) => {
+      if (typeof streamIdentifier === 'number' && profiles.find((p) => p.screenStreamId === streamIdentifier)) {
+        setScreenStreamIds([...screenStreamIds, streamIdentifier]);
+        return;
+      }
+      const remoteUser = streamIdentifier as IAgoraRTCRemoteUser;
+      if (profiles.find((p) => p.screenStreamId === remoteUser.uid)) {
+        setScreenStreamIds([...screenStreamIds, remoteUser.uid as number]);
+      }
     },
-    [joinedRdcUids, setJoinedRdcUids],
+    [screenStreamIds, setScreenStreamIds],
   );
 
-  const handleRequestControlAuthorized = useCallback(
-    (uid: number) => setControlledUids([...controlledUids, uid]),
-    [controlledUids, setControlledUids],
-  );
-
-  const handleRequestControlUnauthorized = useCallback((uid: number) => {
-    message.warn(`${uid}, declined your control request`);
-  }, []);
-
-  const handleQuitControlEvent = useCallback(
-    (uid) => setControlledUids(controlledUids.filter((cUid) => cUid !== uid)),
-    [controlledUids, setControlledUids],
+  const handleStreamLeft = useCallback(
+    (streamIdentifier: number | IAgoraRTCRemoteUser) => {
+      if (typeof streamIdentifier === 'number') {
+        setScreenStreamIds(screenStreamIds.filter((streamId) => streamId === streamIdentifier));
+        return;
+      }
+      const remoteUser = streamIdentifier as IAgoraRTCRemoteUser;
+      setScreenStreamIds(screenStreamIds.filter((streamId) => streamId === remoteUser.uid));
+    },
+    [screenStreamIds, setScreenStreamIds],
   );
 
   const handleBeforeunload = useCallback(() => {
     if (!rdcEngine) {
       return;
     }
-    controlledUids.forEach((cUid) => rdcEngine.quitControl(cUid));
+    profiles
+      .filter((p) => userIdsUnderControl.includes(p.userId))
+      .forEach(({ userId, rdcRole }) => rdcEngine.quitControl(userId, rdcRole));
     rdcEngine.leave();
     rdcEngine.dispose();
-  }, [rdcEngine, controlledUids]);
+  }, [rdcEngine, userIdsUnderControl, profiles]);
 
-  // Initialize Engine
   useEffect(() => {
-    if (!value || !location) {
+    if (!session || !location) {
       return;
     }
-    const { opts } = qs.parse(location.search.replace('?', '')) as { opts: string };
-    const options: Partial<HostOptions> = opts ? JSON.parse(atob(opts)) : {};
-    const { appId } = value.data;
+    const { appId } = session;
     if (options.rtcSDK === 'electron') {
       const rtcEngine = new AgoraRtcEngine();
       console.log.call(window, `Log files path: ${LOG_FOLDER}`);
@@ -110,7 +126,6 @@ const Session: FC = () => {
       setRDCEngine(rdcEngine);
       return;
     }
-
     if (options.rtcSDK === 'web') {
       const rtcEngine = AgoraRTC.createClient({ role: 'host', mode: 'rtc', codec: 'av1' });
       const rdcEngine = RDCEngineWithWebRTC.create(rtcEngine, {
@@ -121,38 +136,38 @@ const Session: FC = () => {
       setRtcEngine(rtcEngine);
       setRDCEngine(rdcEngine);
     }
-  }, [value, location]);
+  }, [session, location]);
 
   // Join Channel
   useEffect(() => {
-    if (!value || !rdcEngine || !rtcEngine) {
+    if (!session || !rdcEngine || !rtcEngine) {
       return;
     }
-    const { channel, rdc, rtc } = value.data;
-    rdcEngine.join(rdc.uid, channel, rdc.tokens.rtc, rdc.tokens.rtm);
+    const { appId, userId, userToken, channel, screenStreamId, screenStreamToken, cameraStreamId, cameraStreamToken } =
+      session;
+    rdcEngine.join(userId, userToken, channel, screenStreamId, screenStreamToken);
 
-    if (rtcEngine instanceof AgoraRtcEngine) {
+    if (options.rtcSDK === 'electron' && rtcEngine instanceof AgoraRtcEngine) {
       rtcEngine.setChannelProfile(0);
       rtcEngine.setClientRole(1);
       rtcEngine.enableVideo();
-      rtcEngine.joinChannel(rtc.token, channel, '', rtc.uid);
+      rtcEngine.joinChannel(cameraStreamToken, channel, '', cameraStreamId);
     }
-  }, [value, rtcEngine, rdcEngine]);
+    if (options.rtcSDK === 'web') {
+      // TODO: implements
+    }
+  }, [sessionState, rtcEngine, rdcEngine]);
 
-  // Handle Events
+  // Handle RDC Events
   useEffect(() => {
     if (!rdcEngine) {
       return;
     }
-    rdcEngine.on('rdc-screen-stream-joined', handleScreenStreamJoined);
-    rdcEngine.on('rdc-screen-stream-leave', handleScreenStreamLeaved);
     rdcEngine.on('rdc-request-control-authorized', handleRequestControlAuthorized);
     rdcEngine.on('rdc-request-control-unauthorized', handleRequestControlUnauthorized);
     rdcEngine.on('rdc-quit-control', handleQuitControlEvent);
     rdcEngine.on('rdc-remote-paste', handleRemotePaste);
     return () => {
-      rdcEngine.off('rdc-screen-stream-joined', handleScreenStreamJoined);
-      rdcEngine.off('rdc-screen-stream-leave', handleScreenStreamLeaved);
       rdcEngine.off('rdc-request-control-authorized', handleRequestControlAuthorized);
       rdcEngine.off('rdc-request-control-unauthorized', handleRequestControlUnauthorized);
       rdcEngine.off('rdc-quit-control', handleQuitControlEvent);
@@ -162,49 +177,80 @@ const Session: FC = () => {
     handleQuitControlEvent,
     handleRequestControlAuthorized,
     handleRequestControlUnauthorized,
-    handleScreenStreamJoined,
-    handleScreenStreamLeaved,
     handleRemotePaste,
     rdcEngine,
   ]);
 
+  // Handle RTC Events
+  useEffect(() => {
+    if (!rtcEngine || !options) {
+      return;
+    }
+    if (options.rtcSDK === 'electron' && rtcEngine instanceof AgoraRtcEngine) {
+      rtcEngine.on('userJoined', handleStreamJoined);
+      rtcEngine.on('removeStream', handleStreamLeft);
+    }
+    if (options.rtcSDK === 'web') {
+      (rtcEngine as IAgoraRTCClient).on('user-joined', handleStreamJoined);
+      (rtcEngine as IAgoraRTCClient).on('user-left', handleStreamLeft);
+    }
+    return () => {
+      if (options.rtcSDK === 'electron' && rtcEngine instanceof AgoraRtcEngine) {
+        rtcEngine.off('userJoined', handleStreamJoined);
+        rtcEngine.off('removeStream', handleStreamLeft);
+      }
+      if (options.rtcSDK === 'web') {
+        (rtcEngine as IAgoraRTCClient).off('user-joined', handleStreamJoined);
+        (rtcEngine as IAgoraRTCClient).off('user-left', handleStreamLeft);
+      }
+    };
+  }, [rtcEngine]);
+
   useEffect(() => {
     window.addEventListener('beforeunload', handleBeforeunload);
     return () => window.removeEventListener('beforeunload', handleBeforeunload);
-  }, [rdcEngine, controlledUids, handleBeforeunload]);
+  }, [rdcEngine, handleBeforeunload]);
 
-  const handleRequestControl = (uid: number) => {
-    rdcEngine?.requestControl(uid);
+  const handleRequestControl = (userId: string, name: string) => {
+    rdcEngine?.requestControl(userId);
     setVisible(false);
-    message.success(`Control request has been sent to ${uid}.`);
+    message.success(`Control request has been sent to ${name}.`);
   };
 
-  const handleQuitControl = (uid: number) => {
-    rdcEngine?.quitControl(uid);
+  const handleQuitControl = (userId: string, role: RDCRoleType) => {
+    rdcEngine?.quitControl(userId, role);
   };
 
   return (
     <div className="primary-rdc">
       <Tabs>
-        {controlledUids.map((cUid) => (
-          <Tabs.TabPane tab={cUid} key={`${cUid}`} forceRender>
-            <RDC cUid={cUid} rdcEngine={rdcEngine} />
-          </Tabs.TabPane>
-        ))}
+        {profiles
+          .filter((profile) => userIdsUnderControl.includes(profile.userId))
+          .map((profile) => (
+            <Tabs.TabPane tab={profile.name} key={profile.userId} forceRender>
+              <RDC userId={profile.userId} streamId={profile.screenStreamId} rdcEngine={rdcEngine} />
+            </Tabs.TabPane>
+          ))}
       </Tabs>
       <Drawer forceRender={true} width="400" visible={visible} onClose={() => setVisible(false)} closeIcon={null}>
         <List
           itemLayout="horizontal"
-          dataSource={joinedRdcUids}
-          renderItem={(jUid) => (
+          dataSource={profiles.filter((profile) => screenStreamIds.includes(profile.screenStreamId))}
+          renderItem={(profile) => (
             <List.Item>
               <div>
-                <span style={{ marginRight: 10 }}>{jUid}</span>
-                <Button type="link" onClick={() => handleRequestControl(jUid)} disabled={controlledUids.includes(jUid)}>
+                <span style={{ marginRight: 10 }}>{profile.name}</span>
+                <Button
+                  type="link"
+                  onClick={() => handleRequestControl(profile.userId, profile.name)}
+                  disabled={userIdsUnderControl.includes(profile.userId)}>
                   Request Control
                 </Button>
                 <Divider type="vertical" />
-                <Button type="link" onClick={() => handleQuitControl(jUid)} disabled={!controlledUids.includes(jUid)}>
+                <Button
+                  type="link"
+                  onClick={() => handleQuitControl(profile.userId, profile.rdcRole)}
+                  disabled={!userIdsUnderControl.includes(profile.userId)}>
                   Quit Control
                 </Button>
               </div>
@@ -215,7 +261,7 @@ const Session: FC = () => {
       <Affix style={{ position: 'absolute', right: 10, bottom: 20 }}>
         <Button shape="circle" icon={<UserOutlined />} type="primary" onClick={() => setVisible(true)} />
       </Affix>
-      {value?.data.channel ? <div className="channel">CHANNEL: {value?.data.channel}</div> : null}
+      {channel ? <div className="channel">CHANNEL: {channel}</div> : null}
     </div>
   );
 };

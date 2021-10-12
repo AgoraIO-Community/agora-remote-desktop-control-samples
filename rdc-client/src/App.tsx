@@ -9,8 +9,8 @@ const App = () => (
   <HashRouter>
     <Switch>
       <Route path="/" component={Landing} exact />
-      <Route path="/host/:uid" component={Host} exact />
-      <Route path="/controlled/:uid" component={Controlled} exact />
+      <Route path="/host/:userId" component={Host} exact />
+      <Route path="/controlled/:userId" component={Controlled} exact />
     </Switch>
   </HashRouter>
 );

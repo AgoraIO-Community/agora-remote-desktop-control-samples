@@ -3,14 +3,9 @@ import { Affix, Button, Form, FormProps, Input, InputNumber, Modal, Select } fro
 import { useHistory } from 'react-router-dom';
 import { RDCRoleType } from 'agora-rdc-core';
 import { SettingOutlined } from '@ant-design/icons';
-import { joinSession } from '../../api';
+import { joinSession, JoinSessionParams } from '../../api';
 import { HostOptions, ControlledOptions } from '../../interfaces';
 import { FRAME_RATES, RESOLUTION_BITRATE } from '../../constants';
-
-interface LandingParams {
-  role: RDCRoleType;
-  channel: string;
-}
 
 const DEFAULT_HOST_OPTIONS: HostOptions = { mouseEventsThreshold: 30, keyboardEventsThreshold: 30, rtcSDK: 'web' };
 const DEFAULT_CONTROLLED_OPTIONS: ControlledOptions = { resolutionBitrate: '1080p2000', rtcSDK: 'web', frameRate: 60 };
@@ -19,7 +14,7 @@ const Landing: FC = () => {
   const history = useHistory();
   const [visible, setVisible] = useState(false);
   const [role, setRole] = useState<RDCRoleType>();
-  const [landingForm] = Form.useForm<LandingParams>();
+  const [landingForm] = Form.useForm<JoinSessionParams>();
   const [hostForm] = Form.useForm<Partial<HostOptions>>();
   const [controlledForm] = Form.useForm<Partial<ControlledOptions>>();
 
@@ -39,7 +34,7 @@ const Landing: FC = () => {
     [controlledForm],
   );
 
-  const handleValuesChange: FormProps<LandingParams>['onValuesChange'] = (_changedValues, allValues) => {
+  const handleValuesChange: FormProps<JoinSessionParams>['onValuesChange'] = (_changedValues, allValues) => {
     if (typeof allValues.role === 'undefined') {
       return;
     }
@@ -47,17 +42,17 @@ const Landing: FC = () => {
   };
 
   const handleFinish = async () => {
-    const { role, channel } = await landingForm.validateFields();
+    const params = await landingForm.validateFields();
     const {
-      data: { uid },
-    } = await joinSession(channel, role);
+      data: { userId },
+    } = await joinSession(params);
     if (role === RDCRoleType.HOST) {
       const opts = { ...DEFAULT_HOST_OPTIONS, ...hostForm.getFieldsValue() };
-      history.push(`/host/${uid}?opts=${window.btoa(JSON.stringify(opts))}`);
+      history.push(`/host/${userId}?opts=${window.btoa(JSON.stringify(opts))}`);
     }
     if (role === RDCRoleType.CONTROLLED) {
       const opts = { ...DEFAULT_CONTROLLED_OPTIONS, ...controlledForm.getFieldsValue() };
-      history.push(`/controlled/${uid}?opts=${window.btoa(JSON.stringify(opts))}`);
+      history.push(`/controlled/${userId}?opts=${window.btoa(JSON.stringify(opts))}`);
     }
   };
 
@@ -165,7 +160,10 @@ const Landing: FC = () => {
             <Select.Option value={RDCRoleType.CONTROLLED}>Controlled</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item label="Channel" name="channel" rules={[{ required: true, message: 'Please input Channel!' }]}>
+        <Form.Item label="Channel" name="channel" rules={[{ required: true, message: 'Please input channel!' }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please input your name!' }]}>
           <Input />
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 8, span: 8 }}>

@@ -23,7 +23,7 @@
     "agora-rdc-webrtc-electron": "^1.0.0-alpha.6",
     "agora-rtc-sdk-ng": "^4.6.3",
     "antd": "^4.16.7",
-    "axios": "^0.21.1",
+    "axios": "^0.22.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-log": "^4.3.5",
     "electron-updater": "^4.3.9",

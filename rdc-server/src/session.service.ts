@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { RtcTokenBuilder, RtcRole, RtmRole, RtmTokenBuilder } from 'agora-access-token';
 import { RedisService } from 'nestjs-redis';
-import md5 = require('js-md5');
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
+import { v1 as uuid } from 'uuid';
 
-export enum RoleType {
+export enum RDCRoleType {
   /**
    * Host end
    */
@@ -16,31 +16,21 @@ export enum RoleType {
   CONTROLLED = 2,
 }
 
-export enum StreamType {
-  CAMERA = 1,
-  SCREEN = 2,
-  FULL_SCREEN = 3,
+export interface Profile {
+  userId: string;
+  screenStreamId: number;
+  cameraStreamId: number;
+  name: string;
+  rdcRole: RDCRoleType;
 }
 
-export interface RTCAuthorization {
-  uid: number;
-  token: string;
-}
-
-export interface RDCAuthorization {
-  uid: number;
-  tokens: {
-    rtc: string;
-    rtm: string;
-  };
-}
-
-export interface SessionDTO {
-  channel: string;
+export interface SessionDTO extends Profile {
   appId: string;
+  channel: string;
+  userToken: string;
+  screenStreamToken: string;
+  cameraStreamToken: string;
   expiredAt: number;
-  rtc: RTCAuthorization;
-  rdc: RDCAuthorization;
 }
 
 export const ETA = 60 * 60 * 24;
@@ -49,7 +39,7 @@ export const ETA = 60 * 60 * 24;
 export class SessionService {
   constructor(private readonly configService: ConfigService, private readonly redisService: RedisService) {}
 
-  async joinSession(channel: string, role: RoleType): Promise<number> {
+  async joinSession(channel: string, role: RDCRoleType, name: string): Promise<string> {
     const client = await this.redisService.getClient();
 
     const isChannelExist = await client.exists(`c:${channel}:c`);
@@ -63,82 +53,133 @@ export class SessionService {
     }
     const expiredAt = Number(await client.get(`c:${channel}:ea`));
 
-    const rawuid = this.buildUid();
+    const userId = this.buildUserId(channel);
+    const userToken = this.buildUserToken(userId, expiredAt);
 
-    const uid = Number(`${StreamType.CAMERA}${role}${rawuid}`);
-    const token = this.buildRTCToken(channel, uid, expiredAt);
+    const screenStreamId = this.buildStreamId();
+    const screenStreamToken = this.buildStreamToken(channel, screenStreamId, expiredAt);
 
-    const rdcUid = Number(`${StreamType.FULL_SCREEN}${role}${rawuid}`);
-    const rdcRtcToken = this.buildRTCToken(channel, rdcUid, expiredAt);
-    const rdcRtmToken = this.buildRTMToken(rdcUid.toString(), expiredAt);
-    // user:${uid}:channel
-    await client.set(`u:${uid}:c`, channel, 'ex', ETA);
-    // user:${uid}:uid
-    await client.set(`u:${uid}:uid`, uid, 'ex', ETA);
-    // user:${uid}:token;
-    await client.set(`u:${uid}:t`, token, 'ex', ETA);
-    // user:${uid}:rdcUid
-    await client.set(`u:${uid}:ruid`, rdcUid, 'ex', ETA);
-    // user:${uid}:rdcRtcToken;
-    await client.set(`u:${uid}:rrtct`, rdcRtcToken, 'ex', ETA);
-    // user:${uid}:rdcRtmToken;
-    await client.set(`u:${uid}:rrtmt`, rdcRtmToken, 'ex', ETA);
+    const cameraStreamId = this.buildStreamId();
+    const cameraStreamToken = this.buildStreamToken(channel, cameraStreamId, expiredAt);
 
-    return uid;
+    // user:${userId}:channel
+    await client.set(`u:${userId}:c`, channel, 'ex', ETA);
+    // user:${userId}:role
+    await client.set(`u:${userId}:r`, role, 'ex', ETA);
+    // user:${userId}:name
+    await client.set(`u:${userId}:n`, name, 'ex', ETA);
+
+    // user:${userId}:userId
+    await client.set(`u:${userId}:uid`, userId, 'ex', ETA);
+    // user:${userId}:userToken;
+    await client.set(`u:${userId}:ut`, userToken, 'ex', ETA);
+
+    // user:${userId}:screenStreamId
+    await client.set(`u:${userId}:ssid`, screenStreamId, 'ex', ETA);
+    // user:${userId}:screenStreamToken;
+    await client.set(`u:${userId}:sst`, screenStreamToken, 'ex', ETA);
+
+    // user:${userId}:cameraStreamId
+    await client.set(`u:${userId}:csid`, cameraStreamId, 'ex', ETA);
+    // user:${userId}:screenStreamToken;
+    await client.set(`u:${userId}:cst`, cameraStreamToken, 'ex', ETA);
+
+    const sLength = await client.scard(`c:${channel}:uids`);
+    if (sLength === 0) {
+      await client.expire(`c:${channel}:uids`, ETA);
+      Logger.log(`expire key: '${`c:${channel}:uids`}' at: ${ETA}`);
+    }
+
+    await client.sadd(`c:${channel}:uids`, userId, 'ex', ETA);
+
+    return userId;
   }
 
-  async getSession(uid: number): Promise<SessionDTO> {
+  async getSession(userId: string): Promise<SessionDTO> {
     const client = await this.redisService.getClient();
 
-    const token = await client.get(`u:${uid}:t`);
+    const channel = await client.get(`u:${userId}:c`);
 
-    const channel = await client.get(`u:${uid}:c`);
     const expiredAt = await client.get(`c:${channel}:ea`);
 
-    const rdcUid = Number(await client.get(`u:${uid}:ruid`));
-    const rdcRtcToken = await client.get(`u:${uid}:rrtct`);
-    const rdcRtmToken = await client.get(`u:${uid}:rrtmt`);
+    const name = await client.get(`u:${userId}:n`);
+    const rdcRole = Number(await client.get(`u:${userId}:r`));
+
+    const userToken = await client.get(`u:${userId}:ut`);
+
+    const screenStreamId = Number(await client.get(`u:${userId}:ssid`));
+    const screenStreamToken = await client.get(`u:${userId}:sst`);
+
+    const cameraStreamId = Number(await client.get(`u:${userId}:csid`));
+    const cameraStreamToken = await client.get(`u:${userId}:cst`);
 
     return {
+      userId,
+      screenStreamId,
+      cameraStreamId,
+      name,
+      rdcRole,
       appId: this.configService.get('AGORA_APP_ID'),
       channel,
+      userToken,
+      screenStreamToken,
+      cameraStreamToken,
       expiredAt: Number(expiredAt),
-      rtc: {
-        uid,
-        token,
-      },
-      rdc: {
-        uid: rdcUid,
-        tokens: {
-          rtc: rdcRtcToken,
-          rtm: rdcRtmToken,
-        },
-      },
     };
   }
 
-  private buildRTCToken(channel: string, uid: number, expiredAt: number) {
+  async getProfiles(userId: string): Promise<Profile[]> {
+    const client = await this.redisService.getClient();
+
+    const channel = await client.get(`u:${userId}:c`);
+    const userIds = await client.smembers(`c:${channel}:uids`);
+
+    return await Promise.all(userIds.map((uid) => this.getProfile(uid)));
+  }
+
+  async getProfile(userId): Promise<Profile> {
+    const client = await this.redisService.getClient();
+
+    const cameraStreamId = Number(await client.get(`u:${userId}:`));
+    const screenStreamId = Number(await client.get(`u:${userId}:`));
+    const name = await client.get(`u:${userId}:n`);
+    const rdcRole = Number(await client.get(`u:${userId}:r`));
+
+    return {
+      userId,
+      cameraStreamId,
+      screenStreamId,
+      name,
+      rdcRole,
+    };
+  }
+
+  private buildStreamToken(channel: string, streamId: number, expiredAt: number) {
     return RtcTokenBuilder.buildTokenWithUid(
       this.configService.get('AGORA_APP_ID'),
       this.configService.get('AGORA_APP_CERTIFICATE'),
       channel,
-      uid,
+      streamId,
       RtcRole.PUBLISHER,
       expiredAt,
     );
   }
 
-  private buildRTMToken(uid: string, expiredAt: number) {
+  private buildUserToken(userId: string, expiredAt: number) {
     return RtmTokenBuilder.buildToken(
       this.configService.get('AGORA_APP_ID'),
       this.configService.get('AGORA_APP_CERTIFICATE'),
-      uid,
+      userId,
       RtmRole.Rtm_User,
       expiredAt,
     );
   }
 
-  private buildUid(): number {
+  private buildUserId(channel: string): string {
+    return `${channel}-${uuid()}`;
+  }
+
+  private buildStreamId(): number {
     return Math.floor(10000 + Math.random() * 90000);
   }
 }
