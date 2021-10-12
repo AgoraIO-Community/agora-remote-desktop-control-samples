@@ -220,8 +220,8 @@ const Session: FC = () => {
     message.success(`Control request has been sent to ${name}.`);
   };
 
-  const handleQuitControl = (userId: string, role: RDCRoleType) => {
-    rdcEngine?.quitControl(userId, role);
+  const handleQuitControl = (userId: string, role: RDCRoleType, streamId: number) => {
+    rdcEngine?.quitControl(userId, role, streamId);
   };
 
   return (
@@ -235,7 +235,7 @@ const Session: FC = () => {
             </Tabs.TabPane>
           ))}
       </Tabs>
-      <Drawer forceRender={true} width="400" visible={visible} onClose={() => setVisible(false)} closeIcon={null}>
+      <Drawer forceRender={true} width="500" visible={visible} onClose={() => setVisible(false)} closeIcon={null}>
         <List
           itemLayout="horizontal"
           dataSource={profiles.filter((profile) => screenStreamIds.includes(profile.screenStreamId))}
@@ -252,7 +252,7 @@ const Session: FC = () => {
                 <Divider type="vertical" />
                 <Button
                   type="link"
-                  onClick={() => handleQuitControl(profile.userId, profile.rdcRole)}
+                  onClick={() => handleQuitControl(profile.userId, profile.rdcRole, profile.screenStreamId)}
                   disabled={!userIdsUnderControl.includes(profile.userId)}>
                   Quit Control
                 </Button>
