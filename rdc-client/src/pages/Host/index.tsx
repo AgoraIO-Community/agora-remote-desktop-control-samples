@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FC, useCallback, Profiler } from 'react';
+import React, { useEffect, useState, FC, useCallback, useMemo } from 'react';
 import { RDCRemotePasteCodes, RDCRemotePastePayload, RDCRemotePasteStatus, RDCRoleType } from 'agora-rdc-core';
 import { AgoraRemoteDesktopControl as RDCEngineWithElectronRTC } from 'agora-rdc-electron';
 import { AgoraRemoteDesktopControl as RDCEngineWithWebRTC } from 'agora-rdc-webrtc-electron';
@@ -31,21 +31,24 @@ const Session: FC = () => {
 
   const channel = sessionState.value?.data.channel;
   const session = sessionState.value?.data;
-  const profiles = profilesState.value?.data ?? [];
+  const profiles = useMemo(() => profilesState.value?.data ?? [], [profilesState]);
   const { opts } = qs.parse(location.search.replace('?', '')) as { opts: string };
-  const options: Partial<HostOptions> = opts ? JSON.parse(atob(opts)) : {};
+  const options: Partial<HostOptions> = useMemo(() => (opts ? JSON.parse(atob(opts)) : {}), [opts]);
 
   const handleRequestControlAuthorized = useCallback(
     (userId: string) => setUserIdsUnderControl([...userIdsUnderControl, userId]),
     [userIdsUnderControl, setUserIdsUnderControl],
   );
 
-  const handleRequestControlUnauthorized = useCallback((userId: string) => {
-    const profile = profiles.find((p) => p.userId === userId);
-    if (profile) {
-      message.warn(`${profile.name} is declined your request`);
-    }
-  }, []);
+  const handleRequestControlUnauthorized = useCallback(
+    (userId: string) => {
+      const profile = profiles.find((p) => p.userId === userId);
+      if (profile) {
+        message.warn(`${profile.name} is declined your request`);
+      }
+    },
+    [profiles],
+  );
 
   const handleQuitControlEvent = useCallback(
     (userId: string) => setUserIdsUnderControl(userIdsUnderControl.filter((userIdUC) => userIdUC !== userId)),
@@ -81,7 +84,7 @@ const Session: FC = () => {
         setScreenStreamIds([...screenStreamIds, remoteUser.uid as number]);
       }
     },
-    [screenStreamIds, setScreenStreamIds],
+    [profiles, screenStreamIds],
   );
 
   const handleStreamLeft = useCallback(
@@ -136,14 +139,14 @@ const Session: FC = () => {
       setRtcEngine(rtcEngine);
       setRDCEngine(rdcEngine);
     }
-  }, [session, location]);
+  }, [session, location, options]);
 
   // Join Channel
   useEffect(() => {
     if (!session || !rdcEngine || !rtcEngine) {
       return;
     }
-    const { appId, userId, userToken, channel, screenStreamId, screenStreamToken, cameraStreamId, cameraStreamToken } =
+    const { userId, userToken, channel, screenStreamId, screenStreamToken, cameraStreamId, cameraStreamToken } =
       session;
     rdcEngine.join(userId, userToken, channel, screenStreamId, screenStreamToken);
 
@@ -156,7 +159,7 @@ const Session: FC = () => {
     if (options.rtcSDK === 'web') {
       // TODO: implements
     }
-  }, [sessionState, rtcEngine, rdcEngine]);
+  }, [sessionState, rtcEngine, rdcEngine, session, options]);
 
   // Handle RDC Events
   useEffect(() => {
@@ -204,7 +207,7 @@ const Session: FC = () => {
         (rtcEngine as IAgoraRTCClient).off('user-left', handleStreamLeft);
       }
     };
-  }, [rtcEngine]);
+  }, [handleStreamJoined, handleStreamLeft, options, rtcEngine]);
 
   useEffect(() => {
     window.addEventListener('beforeunload', handleBeforeunload);
