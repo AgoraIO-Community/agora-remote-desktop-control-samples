@@ -232,7 +232,7 @@ const Session: FC = () => {
             </Tabs.TabPane>
           ))}
       </Tabs>
-      <Drawer forceRender={true} width="400" visible={visible} onClose={() => setVisible(false)} closeIcon={null}>
+      <Drawer forceRender={true} width="500" visible={visible} onClose={() => setVisible(false)} closeIcon={null}>
         <List
           itemLayout="horizontal"
           dataSource={profiles.filter((profile) => screenStreamIds.includes(profile.screenStreamId))}
