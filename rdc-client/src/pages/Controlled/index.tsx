@@ -1,4 +1,4 @@
-import React, { useEffect, useState, FC, useCallback } from 'react';
+import React, { useEffect, useState, FC, useCallback, useMemo } from 'react';
 import { RDCRoleType, RDCDisplay, RDCDisplayConfiguration } from 'agora-rdc-core';
 import { AgoraRemoteDesktopControl as RDCEngineWithElectronRTC } from 'agora-rdc-electron';
 import { AgoraRemoteDesktopControl as RDCEngineWithWebRTC } from 'agora-rdc-webrtc-electron';
@@ -33,9 +33,9 @@ const Session: FC = () => {
 
   const channel = sessionState.value?.data.channel;
   const session = sessionState.value?.data;
-  const profiles = profilesState.value?.data ?? [];
+  const profiles = useMemo(() => profilesState.value?.data ?? [], [profilesState]);
   const { opts } = qs.parse(location.search.replace('?', '')) as { opts: string };
-  const options: Partial<ControlledOptions> = opts ? JSON.parse(atob(opts)) : {};
+  const options: Partial<ControlledOptions> = useMemo(() => (opts ? JSON.parse(atob(opts)) : {}), [opts]);
 
   const handleRequestControl = useCallback(
     (userId: string) => {
@@ -78,7 +78,7 @@ const Session: FC = () => {
     rdcEngine.quitControl(profile.userId, profile.rdcRole);
     rdcEngine.leave();
     // rdcEngine.dispose();
-  }, [rdcEngine, userIdControlledBy]);
+  }, [rdcEngine, userIdControlledBy, profiles]);
 
   // Initialize Engine
   useEffect(() => {
@@ -109,7 +109,7 @@ const Session: FC = () => {
       setRtcEngine(rtcEngine);
       setRDCEngine(rdcEngine);
     }
-  }, [session, location]);
+  }, [session, location, options]);
 
   // Join Channel
   useEffect(() => {
@@ -128,7 +128,7 @@ const Session: FC = () => {
     if (options.rtcSDK === 'web') {
       // TODO: implements
     }
-  }, [session, rdcEngine, rtcEngine]);
+  }, [session, rdcEngine, rtcEngine, options]);
 
   // Handle Events
   useEffect(() => {
