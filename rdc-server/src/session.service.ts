@@ -140,8 +140,8 @@ export class SessionService {
   async getProfile(userId): Promise<Profile> {
     const client = await this.redisService.getClient();
 
-    const cameraStreamId = Number(await client.get(`u:${userId}:`));
-    const screenStreamId = Number(await client.get(`u:${userId}:`));
+    const cameraStreamId = Number(await client.get(`u:${userId}:csid`));
+    const screenStreamId = Number(await client.get(`u:${userId}:ssid`));
     const name = await client.get(`u:${userId}:n`);
     const rdcRole = Number(await client.get(`u:${userId}:r`));
 
