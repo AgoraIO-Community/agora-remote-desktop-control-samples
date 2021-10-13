@@ -38,3 +38,11 @@
   color: #1890ff;
   background-color: rgba(0, 0, 0, 0.3);
 }
+
+.primary-rdc .ant-spin-blur {
+  opacity: 0.5;
+}
+
+.primary-rdc .ant-spin-nested-loading > div > .ant-spin .ant-spin-text {
+  text-shadow: none;
+}
