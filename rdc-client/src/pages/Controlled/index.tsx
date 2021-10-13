@@ -3,7 +3,7 @@ import { RDCRoleType, RDCDisplay, RDCDisplayConfiguration } from 'agora-rdc-core
 import { AgoraRemoteDesktopControl as RDCEngineWithElectronRTC } from 'agora-rdc-electron';
 import { AgoraRemoteDesktopControl as RDCEngineWithWebRTC } from 'agora-rdc-webrtc-electron';
 import AgoraRtcEngine from 'agora-electron-sdk';
-import AgoraRTC, { IAgoraRTCClient } from 'agora-rtc-sdk-ng';
+import AgoraRTC, { IAgoraRTCClient, IAgoraRTCRemoteUser } from 'agora-rtc-sdk-ng';
 import { useLocation, useParams } from 'react-router-dom';
 import { useAsync } from 'react-use';
 import { Affix, Button, message, Modal, Popconfirm, Tabs } from 'antd';
@@ -21,8 +21,9 @@ const LOG_FOLDER = isMacOS ? `${window.process.env.HOME}/Library/Logs/RDCSeconda
 const Session: FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const location = useLocation();
+  const [screenStreamIds, setScreenStreamIds] = useState<number[]>([]);
   const sessionState = useAsync(() => fetchSession(userId), [userId]);
-  const profilesState = useAsync(() => fetchProfiles(userId), [userId]);
+  const profilesState = useAsync(() => fetchProfiles(userId), [userId, screenStreamIds]);
   const [rtcEngine, setRtcEngine] = useState<AgoraRtcEngine | IAgoraRTCClient | undefined>();
   const [rdcEngine, setRDCEngine] = useState<RDCEngineWithElectronRTC | RDCEngineWithWebRTC | undefined>();
   const [visible, setVisible] = useState(false);
@@ -36,6 +37,32 @@ const Session: FC = () => {
   const profiles = useMemo(() => profilesState.value?.data ?? [], [profilesState]);
   const { opts } = qs.parse(location.search.replace('?', '')) as { opts: string };
   const options: Partial<ControlledOptions> = useMemo(() => (opts ? JSON.parse(atob(opts)) : {}), [opts]);
+
+  const handleStreamJoined = useCallback(
+    (streamIdentifier: number | IAgoraRTCRemoteUser) => {
+      if (typeof streamIdentifier === 'number' && profiles.find((p) => p.screenStreamId === streamIdentifier)) {
+        setScreenStreamIds([...screenStreamIds, streamIdentifier]);
+        return;
+      }
+      const remoteUser = streamIdentifier as IAgoraRTCRemoteUser;
+      if (profiles.find((p) => p.screenStreamId === remoteUser.uid)) {
+        setScreenStreamIds([...screenStreamIds, remoteUser.uid as number]);
+      }
+    },
+    [profiles, screenStreamIds],
+  );
+
+  const handleStreamLeft = useCallback(
+    (streamIdentifier: number | IAgoraRTCRemoteUser) => {
+      if (typeof streamIdentifier === 'number') {
+        setScreenStreamIds(screenStreamIds.filter((streamId) => streamId === streamIdentifier));
+        return;
+      }
+      const remoteUser = streamIdentifier as IAgoraRTCRemoteUser;
+      setScreenStreamIds(screenStreamIds.filter((streamId) => streamId === remoteUser.uid));
+    },
+    [screenStreamIds, setScreenStreamIds],
+  );
 
   const handleRequestControl = useCallback(
     (userId: string) => {
@@ -171,6 +198,31 @@ const Session: FC = () => {
       key: profile.userId,
     });
   }, [location.search, profiles, rdcEngine, userIdControlledBy]);
+
+  // Handle RTC Events
+  useEffect(() => {
+    if (!rtcEngine || !options) {
+      return;
+    }
+    if (options.rtcSDK === 'electron' && rtcEngine instanceof AgoraRtcEngine) {
+      rtcEngine.on('userJoined', handleStreamJoined);
+      rtcEngine.on('removeStream', handleStreamLeft);
+    }
+    if (options.rtcSDK === 'web') {
+      (rtcEngine as IAgoraRTCClient).on('user-joined', handleStreamJoined);
+      (rtcEngine as IAgoraRTCClient).on('user-left', handleStreamLeft);
+    }
+    return () => {
+      if (options.rtcSDK === 'electron' && rtcEngine instanceof AgoraRtcEngine) {
+        rtcEngine.off('userJoined', handleStreamJoined);
+        rtcEngine.off('removeStream', handleStreamLeft);
+      }
+      if (options.rtcSDK === 'web') {
+        (rtcEngine as IAgoraRTCClient).off('user-joined', handleStreamJoined);
+        (rtcEngine as IAgoraRTCClient).off('user-left', handleStreamLeft);
+      }
+    };
+  }, [handleStreamJoined, handleStreamLeft, options, rtcEngine]);
 
   const declineRequest = useCallback(() => {
     const profile = profiles.find((profile) => {

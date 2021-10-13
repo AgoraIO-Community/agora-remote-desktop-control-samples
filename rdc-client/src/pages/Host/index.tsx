@@ -22,13 +22,13 @@ const Session: FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const location = useLocation();
   const [visible, setVisible] = useState(true);
+  const [screenStreamIds, setScreenStreamIds] = useState<number[]>([]);
+  const [userIdsUnderControl, setUserIdsUnderControl] = useState<string[]>([]);
   const sessionState = useAsync(() => fetchSession(userId), [userId]);
-  const profilesState = useAsync(() => fetchProfiles(userId), [userId]);
+  const profilesState = useAsync(() => fetchProfiles(userId), [userId, screenStreamIds]);
   const [rtcEngine, setRtcEngine] = useState<AgoraRtcEngine | IAgoraRTCClient | undefined>();
   const [rdcEngine, setRDCEngine] = useState<RDCEngineWithElectronRTC | RDCEngineWithWebRTC | undefined>();
-  const [userIdsUnderControl, setUserIdsUnderControl] = useState<string[]>([]);
-  const [screenStreamIds, setScreenStreamIds] = useState<number[]>([]);
-
+  
   const channel = sessionState.value?.data.channel;
   const session = sessionState.value?.data;
   const profiles = useMemo(() => profilesState.value?.data ?? [], [profilesState]);
