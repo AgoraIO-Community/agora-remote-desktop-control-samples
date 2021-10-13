@@ -7,8 +7,8 @@ import AgoraRTC, { IAgoraRTCClient, IAgoraRTCRemoteUser } from 'agora-rtc-sdk-ng
 import { useParams, useLocation } from 'react-router-dom';
 import { fetchProfiles, fetchSession } from '../../api';
 import { useAsync } from 'react-use';
-import { Affix, Button, Divider, Drawer, List, message, Tabs } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { Affix, Button, Divider, Drawer, List, message, Spin, Tabs } from 'antd';
+import { UserOutlined, LoadingOutlined } from '@ant-design/icons';
 import qs from 'querystring';
 import RDC from './RDC';
 import './index.css';
@@ -28,7 +28,8 @@ const Session: FC = () => {
   const profilesState = useAsync(() => fetchProfiles(userId), [userId, screenStreamIds]);
   const [rtcEngine, setRtcEngine] = useState<AgoraRtcEngine | IAgoraRTCClient | undefined>();
   const [rdcEngine, setRDCEngine] = useState<RDCEngineWithElectronRTC | RDCEngineWithWebRTC | undefined>();
-  
+  const [pasting, setPasting] = useState(false);
+
   const channel = sessionState.value?.data.channel;
   const session = sessionState.value?.data;
   const profiles = useMemo(() => profilesState.value?.data ?? [], [profilesState]);
@@ -57,19 +58,17 @@ const Session: FC = () => {
 
   const handleRemotePaste = useCallback((payload: RDCRemotePastePayload) => {
     if (payload.code === RDCRemotePasteCodes.SUCCEEDED && payload.status === RDCRemotePasteStatus.STARTING) {
-      message.loading({
-        key: 'rdc-remote-pasting',
-        content: 'File is pasting...',
-      });
+      setPasting(true);
     }
+
     if (payload.code === RDCRemotePasteCodes.SUCCEEDED && payload.status === RDCRemotePasteStatus.SUCCEEDED) {
+      setPasting(false);
       message.success('File is pasted.');
-      message.destroy('rdc-remote-pasting');
     }
 
     if (payload.code !== RDCRemotePasteCodes.SUCCEEDED && payload.status === RDCRemotePasteStatus.FAILED) {
       message.error('Failed to pasting file.');
-      message.destroy('rdc-remote-pasting');
+      setPasting(false);
     }
   }, []);
 
@@ -231,7 +230,12 @@ const Session: FC = () => {
           .filter((profile) => userIdsUnderControl.includes(profile.userId))
           .map((profile) => (
             <Tabs.TabPane tab={profile.name} key={profile.userId} forceRender>
-              <RDC userId={profile.userId} streamId={profile.screenStreamId} rdcEngine={rdcEngine} />
+              <Spin
+                spinning={pasting}
+                tip="File is pasting..."
+                indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}>
+                <RDC userId={profile.userId} streamId={profile.screenStreamId} rdcEngine={rdcEngine} />
+              </Spin>
             </Tabs.TabPane>
           ))}
       </Tabs>
