@@ -4,8 +4,6 @@ WORKDIR /RDC-SERVER
 
 COPY package.json ./
 
-COPY yarn.lock ./
-
 RUN yarn install --production
 
 COPY dist/* ./
