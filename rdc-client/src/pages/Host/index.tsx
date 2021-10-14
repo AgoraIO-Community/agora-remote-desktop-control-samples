@@ -1,5 +1,5 @@
 import React, { useEffect, useState, FC, useCallback, useMemo } from 'react';
-import { RDCRemotePasteCodes, RDCRemotePastePayload, RDCRemotePasteStatus, RDCRoleType } from 'agora-rdc-core';
+import { RDCRoleType, RDCRemotelyPastingCodes, RDCRemotelyPastingStatus, RDCRemotelyPasting } from 'agora-rdc-core';
 import { AgoraRemoteDesktopControl as RDCEngineWithElectronRTC } from 'agora-rdc-electron';
 import { AgoraRemoteDesktopControl as RDCEngineWithWebRTC } from 'agora-rdc-webrtc-electron';
 import AgoraRtcEngine from 'agora-electron-sdk';
@@ -56,17 +56,17 @@ const Session: FC = () => {
     [userIdsUnderControl, setUserIdsUnderControl],
   );
 
-  const handleRemotePaste = useCallback((payload: RDCRemotePastePayload) => {
-    if (payload.code === RDCRemotePasteCodes.SUCCEEDED && payload.status === RDCRemotePasteStatus.STARTING) {
+  const handleRemotePaste = useCallback((status, RDCRemotePasteStatus, code: RDCRemotelyPastingCodes) => {
+    if (code === RDCRemotelyPastingCodes.SUCCEEDED && status === RDCRemotePasteStatus.STARTING) {
       setPasting(true);
     }
 
-    if (payload.code === RDCRemotePasteCodes.SUCCEEDED && payload.status === RDCRemotePasteStatus.SUCCEEDED) {
+    if (code === RDCRemotelyPastingCodes.SUCCEEDED && status === RDCRemotePasteStatus.SUCCEEDED) {
       setPasting(false);
       message.success('File is pasted.');
     }
 
-    if (payload.code !== RDCRemotePasteCodes.SUCCEEDED && payload.status === RDCRemotePasteStatus.FAILED) {
+    if (code !== RDCRemotelyPastingCodes.SUCCEEDED && status === RDCRemotePasteStatus.FAILED) {
       message.error('Failed to pasting file.');
       setPasting(false);
     }
