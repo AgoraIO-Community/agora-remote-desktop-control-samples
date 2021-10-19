@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>RDC Client Landing</title>
+  <style>
+    .form-item {
+      margin-top: 16px;
+    }
+
+    .notice {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <form>
+      <div class="form-item">
+        <label>* Role: </label>
+        <select name="role" id="role">
+          <option value="">Please choose an role</option>
+          <option value="1">HOST</option>
+          <option value="2">CONTROLLED</option>
+        </select>
+      </div>
+      <div class="form-item">
+        <label>* Channel: </label>
+        <input name="channel" id="channel" placeholder="Please input channel" />
+      </div>
+      <div class="form-item">
+        <label>* Name: </label>
+        <input name="name" id="name" placeholder="Please input your name" />
+      </div>
+      <div class="form-item">
+        <button id="submit" type="submit">JOIN</button>
+      </div>
+    </form>
+  </div>
+  <script type="module" src="/src/landing.ts"></script>
+</body>
+
+</html>

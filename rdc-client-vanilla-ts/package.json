@@ -1,0 +1,21 @@
+{
+  "name": "rdc-client-vanilla-ts",
+  "version": "0.0.0",
+  "main": "build/electron/main.js",
+  "scripts": {
+    "start": "concurrently \"vite\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
+    "build": "vite build && tsc -p electron && electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^7.1.2",
+    "electron-builder": "^22.13.1",
+    "typescript": "^4.3.2",
+    "vite": "^2.6.4",
+    "vite-plugin-commonjs-externals": "^0.1.1"
+  },
+  "dependencies": {
+    "agora-rdc-webrtc-electron": "^1.0.0-alpha.6",
+    "agora-rtc-sdk-ng": "^4.6.3",
+    "querystring": "^0.2.1"
+  }
+}
