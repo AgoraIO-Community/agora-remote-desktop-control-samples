@@ -3,6 +3,7 @@ import AgoraRtcEngine from 'agora-electron-sdk';
 import AgoraRTC from 'agora-rtc-sdk-ng';
 import { AgoraRemoteDesktopControl as RDCEngineWithElectronRTC } from 'agora-rdc-electron';
 import { AgoraRemoteDesktopControl as RDCEngineWithWebRTC } from 'agora-rdc-webrtc-electron';
+import { RDCRoleType } from 'agora-rdc-core';
 import { EnginesContext } from './context';
 import { RDCEngine, RTCEngine } from './interface';
 import { useRDCEngineType, useRDCThresholdOptions } from '../options';
@@ -58,7 +59,9 @@ export const EnginesProvider: FC = ({ children }) => {
     const { userId, userToken, channel, screenStreamId, screenStreamToken, cameraStreamId, cameraStreamToken } =
       session;
     rdcEngine.join(userId, userToken, channel, screenStreamId, screenStreamToken);
-    rdcEngine.allowObservation()
+    if (rdcEngine.getRole() === RDCRoleType.HOST) {
+      rdcEngine.allowObservation();
+    }
 
     if (rtcEngineType === 'electron' && rtcEngine instanceof AgoraRtcEngine) {
       rtcEngine.setChannelProfile(0);
