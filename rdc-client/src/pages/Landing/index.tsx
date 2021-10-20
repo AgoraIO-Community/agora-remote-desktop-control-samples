@@ -7,8 +7,8 @@ import { joinSession, JoinSessionParams } from '../../api';
 import { HostOptions, ControlledOptions } from '../../interfaces';
 import { FRAME_RATES, RESOLUTION_BITRATE } from '../../constants';
 
-const DEFAULT_HOST_OPTIONS: HostOptions = { mouseEventsThreshold: 30, keyboardEventsThreshold: 30, rtcSDK: 'web' };
-const DEFAULT_CONTROLLED_OPTIONS: ControlledOptions = { resolutionBitrate: '1080p2000', rtcSDK: 'web', frameRate: 60 };
+const DEFAULT_HOST_OPTIONS: HostOptions = { mouseEventsThreshold: 30, keyboardEventsThreshold: 30, rtcEngineType: 'web' };
+const DEFAULT_CONTROLLED_OPTIONS: ControlledOptions = { resolutionBitrate: '1080p2000', rtcEngineType: 'web', frameRate: 60 };
 
 const Landing: FC = () => {
   const history = useHistory();
@@ -48,11 +48,11 @@ const Landing: FC = () => {
     } = await joinSession(params);
     if (role === RDCRoleType.HOST) {
       const opts = { ...DEFAULT_HOST_OPTIONS, ...hostForm.getFieldsValue() };
-      history.push(`/host/${userId}?opts=${window.btoa(JSON.stringify(opts))}`);
+      history.push(`/session/${userId}?opts=${window.btoa(JSON.stringify(opts))}`);
     }
     if (role === RDCRoleType.CONTROLLED) {
       const opts = { ...DEFAULT_CONTROLLED_OPTIONS, ...controlledForm.getFieldsValue() };
-      history.push(`/controlled/${userId}?opts=${window.btoa(JSON.stringify(opts))}`);
+      history.push(`/session/${userId}?opts=${window.btoa(JSON.stringify(opts))}`);
     }
   };
 

@@ -1,17 +1,16 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import { AgoraRemoteDesktopControl as RDCEngineWithElectronRTC } from 'agora-rdc-electron';
-import { AgoraRemoteDesktopControl as RDCEngineWithWebRTC } from 'agora-rdc-webrtc-electron';
 import { Button } from 'antd';
 import { FullscreenOutlined, FullscreenExitOutlined } from '@ant-design/icons';
 import { useThrottleFn } from 'react-use';
+import { useEngines } from '../../hooks/engines';
 
-export interface RDCProps {
+export interface ControllerProps {
   userId: string;
   streamId: number;
-  rdcEngine?: RDCEngineWithElectronRTC | RDCEngineWithWebRTC;
 }
 
-const RDC: FC<RDCProps> = ({ userId, streamId, rdcEngine }) => {
+export const Controller: FC<ControllerProps> = ({ userId, streamId }) => {
+  const { rdcEngine } = useEngines();
   const attachRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullScreen] = useState<boolean>();
   const [[width, height], setSize] = useState<[number, number]>([window.innerWidth, window.innerHeight - 56]);
@@ -41,7 +40,7 @@ const RDC: FC<RDCProps> = ({ userId, streamId, rdcEngine }) => {
   };
 
   return (
-    <div className="primary-rdc-screen-wrap">
+    <div className="rdc-client-screen-wrap">
       <div className="rdc-screen" ref={attachRef} style={size ? { width: size[0], height: size[1] } : undefined} />
       <div className="control-bar">
         <Button
@@ -54,5 +53,3 @@ const RDC: FC<RDCProps> = ({ userId, streamId, rdcEngine }) => {
     </div>
   );
 };
-
-export default RDC;

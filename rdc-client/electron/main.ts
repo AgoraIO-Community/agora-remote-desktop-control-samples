@@ -1,6 +1,5 @@
 import { app, BrowserWindow } from 'electron';
 import logger from 'electron-log';
-import ora from 'ora';
 import registerHandlers from 'agora-rdc-webrtc-electron/lib/electron/registerHandlers';
 import childProcess from 'child_process';
 
@@ -20,11 +19,6 @@ const __DEV__ = process.env.NODE_ENV === 'development';
 const createWindow = async () => {
   logger.debug('__DEV__: ', __DEV__);
   let mainWindow: BrowserWindow | null = null;
-  if (__DEV__) {
-    const spinner = ora('Installing extensions.').start();
-    // await installExtensions();
-    spinner.succeed('Extensions installed!');
-  }
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 768,
@@ -46,8 +40,6 @@ const createWindow = async () => {
   }
   if (!__DEV__) {
     logger.transports.file.level = 'info';
-    // autoUpdater.logger = logger;
-    // autoUpdater.checkForUpdatesAndNotify();
   }
 };
 app.whenReady().then(createWindow);

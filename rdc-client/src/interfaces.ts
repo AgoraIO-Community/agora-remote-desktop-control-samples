@@ -1,11 +1,11 @@
+import { RDCThresholdOptions } from 'agora-rdc-core';
+import { RTCEngineType } from './hooks/engines';
+
 export interface Options {
-  rtcSDK: 'web' | 'electron';
+  rtcEngineType: RTCEngineType;
 }
 
-export interface HostOptions extends Options {
-  mouseEventsThreshold: number;
-  keyboardEventsThreshold: number;
-}
+export type HostOptions = Options & RDCThresholdOptions;
 
 export interface ControlledOptions extends Options {
   resolutionBitrate: string;
