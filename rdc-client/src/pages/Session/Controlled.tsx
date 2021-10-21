@@ -50,13 +50,16 @@ export const Controlled: FC = () => {
 
   return session && session.rdcRole === RDCRoleType.CONTROLLED ? (
     <>
-      {profiles
-        .filter((profile) => userIdsUnderObserving.includes(profile.userId))
-        .map((profile) => (
-          <Tabs.TabPane tab={profile.name} key={profile.userId} forceRender>
-            <Observer streamId={profile.screenStreamId} />
-          </Tabs.TabPane>
-        ))}
+      <Tabs>
+        {profiles
+          .filter((profile) => userIdsUnderObserving.includes(profile.userId))
+          .map((profile) => (
+            <Tabs.TabPane tab={profile.name} key={profile.userId} forceRender>
+              <Observer streamId={profile.screenStreamId} />
+            </Tabs.TabPane>
+          ))}
+      </Tabs>
+
       <Profiles renderItem={renderItem} />
     </>
   ) : null;

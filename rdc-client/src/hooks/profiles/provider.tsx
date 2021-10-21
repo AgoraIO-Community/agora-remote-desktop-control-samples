@@ -40,7 +40,7 @@ export const ProfilesProvider: FC<ProfilesProviderProps> = ({ userId, children }
         return;
       }
       const remoteUser = streamIdentifier as IAgoraRTCRemoteUser;
-      setScreenStreamIds(screenStreamIds.filter((streamId) => streamId === remoteUser.uid));
+      setScreenStreamIds(screenStreamIds.filter((streamId) => streamId !== remoteUser.uid));
     },
     [screenStreamIds, setScreenStreamIds],
   );
