@@ -5,6 +5,7 @@ import { IAgoraRTCClient, IAgoraRTCRemoteUser } from 'agora-rtc-sdk-ng';
 import { useEngines } from '../engines';
 import { fetchProfiles } from '../../api';
 import { ProfilesContext } from './context';
+import { useSession } from '../session';
 
 export interface ProfilesProviderProps {
   userId: string;
@@ -13,9 +14,13 @@ export interface ProfilesProviderProps {
 export const ProfilesProvider: FC<ProfilesProviderProps> = ({ userId, children }) => {
   const { rtcEngine, rtcEngineType } = useEngines();
   const [screenStreamIds, setScreenStreamIds] = useState<number[]>([]);
+  const session = useSession();
   const asyncState = useAsync(() => fetchProfiles(userId), [userId, screenStreamIds]);
 
-  const profiles = useMemo(() => asyncState.value?.data ?? [], [asyncState]);
+  const profiles = useMemo(
+    () => (asyncState.value?.data ?? []).filter((p) => p.userId !== session?.userId),
+    [session, asyncState],
+  );
   const value = useMemo(
     () => profiles.filter((profile) => screenStreamIds.includes(profile.screenStreamId)),
     [screenStreamIds, profiles],
@@ -24,7 +29,7 @@ export const ProfilesProvider: FC<ProfilesProviderProps> = ({ userId, children }
   const handleStreamJoined = useCallback(
     (streamIdentifier: number | IAgoraRTCRemoteUser) => {
       if (typeof streamIdentifier === 'number') {
-        setScreenStreamIds([...screenStreamIds, streamIdentifier]);
+        setScreenStreamIds([...screenStreamIds, streamIdentifier].filter((uid) => uid));
         return;
       }
       const remoteUser = streamIdentifier as IAgoraRTCRemoteUser;
