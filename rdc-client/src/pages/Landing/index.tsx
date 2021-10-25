@@ -93,7 +93,7 @@ const Landing: FC = () => {
         <>
           {role === RDCRoleType.HOST ? (
             <Form labelCol={{ span: 12 }} form={hostForm}>
-              <Form.Item label="RTC SDK" name="rtcSDK">
+              <Form.Item label="RTC SDK" name="rtcEngineType">
                 <Select>
                   <Select.Option value="electron">agora-sdk-electron</Select.Option>
                   <Select.Option value="web">agora-rtc-sdk-ng</Select.Option>
@@ -115,7 +115,7 @@ const Landing: FC = () => {
           ) : null}
           {role === RDCRoleType.CONTROLLED ? (
             <Form labelCol={{ span: 10 }} form={controlledForm}>
-              <Form.Item label="RTC SDK" name="rtcSDK">
+              <Form.Item label="RTC SDK" name="rtcEngineType">
                 <Select>
                   <Select.Option value="electron">agora-sdk-electron</Select.Option>
                   <Select.Option value="web">agora-rtc-sdk-ng</Select.Option>

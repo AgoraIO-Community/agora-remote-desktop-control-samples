@@ -44,7 +44,7 @@ export const Controlled: FC = () => {
   };
 
   const handleUnobserve = (userId: string, streamId: number) => {
-    rdcEngine?.unobserve(streamId);
+    rdcEngine?.unobserve(userId, streamId);
     setUserIdsUnderObserving([...userIdsUnderObserving.filter((id) => id !== userId)]);
   };
 
@@ -55,7 +55,7 @@ export const Controlled: FC = () => {
           .filter((profile) => userIdsUnderObserving.includes(profile.userId))
           .map((profile) => (
             <Tabs.TabPane tab={profile.name} key={profile.userId} forceRender>
-              <Observer streamId={profile.screenStreamId} />
+              <Observer userId={profile.userId} streamId={profile.screenStreamId} />
             </Tabs.TabPane>
           ))}
       </Tabs>

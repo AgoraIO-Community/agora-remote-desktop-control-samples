@@ -3,10 +3,11 @@ import { useThrottleFn } from 'react-use';
 import { useEngines } from '../../hooks/engines';
 
 export interface ObserverProps {
+  userId: string;
   streamId: number;
 }
 
-export const Observer: FC<ObserverProps> = ({ streamId }) => {
+export const Observer: FC<ObserverProps> = ({ streamId, userId }) => {
   const { rdcEngine } = useEngines();
   const attachRef = useRef<HTMLDivElement>(null);
   const [[width, height], setSize] = useState<[number, number]>([window.innerWidth, window.innerHeight - 56]);
@@ -15,7 +16,7 @@ export const Observer: FC<ObserverProps> = ({ streamId }) => {
 
   useEffect(() => {
     if (rdcEngine && attachRef && attachRef.current) {
-      rdcEngine.observe(streamId, attachRef.current);
+      rdcEngine.observe(userId, streamId, attachRef.current);
     }
   }, [streamId, rdcEngine, attachRef]);
 
