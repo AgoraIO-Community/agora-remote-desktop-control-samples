@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { Affix, Button, Divider, List, message, Modal, Popconfirm, Tabs, Tag } from 'antd';
+import { Button, Divider, List, message, Modal, Popconfirm, Tabs, Tag } from 'antd';
 import { PoweroffOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 import { Profile } from '../../api';
 import { Profiles } from './Profiles';
@@ -20,7 +20,6 @@ export const Controlled: FC = () => {
   const [activeKey, setActiveKey] = useState<string>();
   const [displays, setDisplays] = useState<RDCDisplay[]>([]);
   const [userIdControlledBy, setUserIdControlledBy] = useState<string>();
-  const [controlled, setControlled] = useState<boolean>(false);
 
   const renderItem = (profile: Profile) => (
     <List.Item>
@@ -74,7 +73,6 @@ export const Controlled: FC = () => {
       message.destroy(userId);
       message.info(`${profile.name} is released control.`);
       setUserIdControlledBy(undefined);
-      setControlled(false);
     },
     [rdcEngine, profiles],
   );
@@ -89,7 +87,6 @@ export const Controlled: FC = () => {
     message.destroy(profile.userId);
     message.info(`You have stopped control by ${profile.name}.`);
     setUserIdControlledBy(undefined);
-    setControlled(false);
   }, [profiles, rdcEngine, userIdControlledBy]);
 
   const declineRequest = useCallback(() => {
@@ -103,7 +100,6 @@ export const Controlled: FC = () => {
     rdcEngine?.unauthorizeControl(profile.userId);
     message.info(`You have been declined control request from ${profile.name}`);
     setUserIdControlledBy(undefined);
-    setControlled(false);
   }, [profiles, rdcEngine, userIdControlledBy]);
 
   const handleObserve = (userId: string) => {
@@ -124,7 +120,6 @@ export const Controlled: FC = () => {
 
       rdcEngine.authorizeControl(userIdControlledBy, display, rdcDisplayConfiguration);
       setVisible(false);
-      setControlled(true);
       message.warn({
         content: (
           <>
@@ -146,7 +141,7 @@ export const Controlled: FC = () => {
         key: profile.userId,
       });
     },
-    [profiles, rdcEngine, userIdControlledBy, rdcDisplayConfiguration],
+    [profiles, rdcEngine, userIdControlledBy, rdcDisplayConfiguration, handleStopControl],
   );
 
   const handleBeforeunload = useCallback(() => {
@@ -156,7 +151,7 @@ export const Controlled: FC = () => {
     }
     rdcEngine.quitControl(profile.userId, profile.rdcRole);
     rdcEngine.leave();
-    // rdcEngine.dispose();
+    rdcEngine.dispose();
   }, [rdcEngine, userIdControlledBy, profiles]);
 
   // Handle Events
