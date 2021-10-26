@@ -17,10 +17,7 @@ export const ProfilesProvider: FC<ProfilesProviderProps> = ({ userId, children }
   const session = useSession();
   const asyncState = useAsync(() => fetchProfiles(userId), [userId, screenStreamIds]);
 
-  const profiles = useMemo(
-    () => (asyncState.value?.data ?? []).filter((p) => p.userId !== session?.userId),
-    [session, asyncState],
-  );
+  const profiles = useMemo(() => asyncState.value?.data ?? [], [asyncState]);
   const value = useMemo(
     () => profiles.filter((profile) => screenStreamIds.includes(profile.screenStreamId)),
     [screenStreamIds, profiles],
@@ -28,14 +25,14 @@ export const ProfilesProvider: FC<ProfilesProviderProps> = ({ userId, children }
 
   const handleStreamJoined = useCallback(
     (streamIdentifier: number | IAgoraRTCRemoteUser) => {
-      if (typeof streamIdentifier === 'number') {
-        setScreenStreamIds([...screenStreamIds, streamIdentifier].filter((uid) => uid));
+      if (typeof streamIdentifier === 'number' && session?.screenStreamId !== streamIdentifier) {
+        setScreenStreamIds([...screenStreamIds, streamIdentifier]);
         return;
       }
       const remoteUser = streamIdentifier as IAgoraRTCRemoteUser;
       setScreenStreamIds([...screenStreamIds, remoteUser.uid as number]);
     },
-    [screenStreamIds, setScreenStreamIds],
+    [session, screenStreamIds, setScreenStreamIds],
   );
 
   const handleStreamLeft = useCallback(

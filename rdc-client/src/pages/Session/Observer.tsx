@@ -18,7 +18,7 @@ export const Observer: FC<ObserverProps> = ({ streamId, userId }) => {
     if (rdcEngine && attachRef && attachRef.current) {
       rdcEngine.observe(userId, streamId, attachRef.current);
     }
-  }, [streamId, rdcEngine, attachRef]);
+  }, [userId, streamId, rdcEngine, attachRef]);
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
