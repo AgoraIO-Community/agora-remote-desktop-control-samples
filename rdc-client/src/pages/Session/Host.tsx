@@ -6,7 +6,7 @@ import { Profile } from '../../api';
 import { Profiles } from './Profiles';
 import { useSession } from '../../hooks/session';
 import { useEngines } from '../../hooks/engines';
-import { useProfiles } from '../../hooks/profiles';
+import { useProfiles, useUserLeft } from '../../hooks/profiles';
 import { Controller } from './Controller';
 
 export const Host: FC = () => {
@@ -99,6 +99,9 @@ export const Host: FC = () => {
     window.addEventListener('beforeunload', handleBeforeunload);
     return () => window.removeEventListener('beforeunload', handleBeforeunload);
   }, [rdcEngine, handleBeforeunload]);
+
+  // hack for controlled end destroy rdc engine too early.
+  useUserLeft(handleQuitControlEvent);
 
   const renderItem = (profile: Profile) => (
     <List.Item>

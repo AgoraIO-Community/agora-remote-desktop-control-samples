@@ -5,7 +5,7 @@ import { Profile } from '../../api';
 import { Profiles } from './Profiles';
 import { useSession } from '../../hooks/session';
 import { RDCDisplay, RDCRoleType } from 'agora-rdc-core';
-import { useProfiles } from '../../hooks/profiles';
+import { useProfiles, useUserLeft } from '../../hooks/profiles';
 import { Observer } from './Observer';
 import { useEngines } from '../../hooks/engines';
 import { useRDCDisplayConfiguration } from '../../hooks/options';
@@ -46,6 +46,7 @@ export const Controlled: FC = () => {
       </div>
     </List.Item>
   );
+
   const handleRequestControl = useCallback(
     (userId: string) => {
       if (!rdcEngine) {
@@ -171,6 +172,9 @@ export const Controlled: FC = () => {
     window.addEventListener('beforeunload', handleBeforeunload);
     return () => window.removeEventListener('beforeunload', handleBeforeunload);
   }, [rdcEngine, handleBeforeunload]);
+
+  // hack for controlled end destroy rdc engine too early.
+  useUserLeft(handleQuitControl);
 
   return session && session.rdcRole === RDCRoleType.CONTROLLED ? (
     <>
