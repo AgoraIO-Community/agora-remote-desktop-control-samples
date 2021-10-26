@@ -32,13 +32,7 @@ export const Host: FC = () => {
   );
 
   const handleQuitControlEvent = useCallback(
-    (userId: string) => {
-      const profile = profiles.find(p => p.userId === userId);
-      if(profile) {
-        message.info(`${profile.name} stopped his computer being controlled by you.`)
-      }
-      setUserIdsUnderControl(userIdsUnderControl.filter((userIdUC) => userIdUC !== userId))
-    },
+    (userId: string) => setUserIdsUnderControl(userIdsUnderControl.filter((userIdUC) => userIdUC !== userId)),
     [userIdsUnderControl, setUserIdsUnderControl],
   );
 
@@ -129,7 +123,7 @@ export const Host: FC = () => {
 
   return session && session.rdcRole === RDCRoleType.HOST ? (
     <>
-      <Tabs >
+      <Tabs>
         {profiles
           .filter((profile) => userIdsUnderControl.includes(profile.userId))
           .map((profile) => (
@@ -138,7 +132,7 @@ export const Host: FC = () => {
                 spinning={pasting}
                 tip="File is pasting..."
                 indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}>
-                <Controller userId={profile.userId} streamId={profile.screenStreamId}/>
+                <Controller userId={profile.userId} streamId={profile.screenStreamId} />
               </Spin>
             </Tabs.TabPane>
           ))}
