@@ -90,7 +90,7 @@ export class SessionService {
       Logger.log(`expire key: '${`c:${channel}:uids`}' at: ${ETA}`);
     }
 
-    await client.sadd(`c:${channel}:uids`, userId, 'ex', ETA);
+    await client.sadd(`c:${channel}:uids`, userId);
 
     return userId;
   }
