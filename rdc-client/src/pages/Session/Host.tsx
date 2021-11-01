@@ -9,6 +9,12 @@ import { useEngines } from '../../hooks/engines';
 import { useProfiles, useUserLeft } from '../../hooks/profiles';
 import { Controller } from './Controller';
 
+const PASTE_REMOTELY_REASON: { [k: number]: string } = {
+  [RDCRemotelyPastingCodes.CONCURRENCY_LIMIT_EXCEEDED]: 'concurrency limit exceeded.',
+  [RDCRemotelyPastingCodes.SIZE_OVERFLOW]: 'max file size is 30MB.',
+  [RDCRemotelyPastingCodes.TIMEOUT]: 'transmission timeout.',
+};
+
 export const Host: FC = () => {
   const session = useSession();
   const { rdcEngine } = useEngines();
@@ -37,18 +43,21 @@ export const Host: FC = () => {
   );
 
   const handleRemotePaste = useCallback((status: RDCRemotelyPastingStatus, code: RDCRemotelyPastingCodes) => {
-    if (code === RDCRemotelyPastingCodes.SUCCEEDED && status === RDCRemotelyPastingStatus.STARTING) {
+    if (status === RDCRemotelyPastingStatus.STARTING && code === RDCRemotelyPastingCodes.SUCCEEDED) {
       setPasting(true);
+      return;
     }
 
-    if (code === RDCRemotelyPastingCodes.SUCCEEDED && status === RDCRemotelyPastingStatus.SUCCEEDED) {
+    if (status === RDCRemotelyPastingStatus.SUCCEEDED && code === RDCRemotelyPastingCodes.SUCCEEDED) {
       setPasting(false);
       message.success('File is pasted.');
+      return;
     }
 
-    if (code !== RDCRemotelyPastingCodes.SUCCEEDED && status === RDCRemotelyPastingStatus.FAILED) {
-      message.error('Failed to pasting file.');
+    if (status === RDCRemotelyPastingStatus.FAILED) {
+      message.error(`Failed to pasting file, cause ${PASTE_REMOTELY_REASON[code as number]}`);
       setPasting(false);
+      return;
     }
   }, []);
 
