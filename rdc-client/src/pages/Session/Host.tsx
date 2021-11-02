@@ -13,7 +13,7 @@ const PASTE_REMOTELY_REASON: { [k: number]: string } = {
   [RDCRemotelyPastingCodes.CONCURRENCY_LIMIT_EXCEEDED]: 'concurrency limit exceeded.',
   [RDCRemotelyPastingCodes.SIZE_OVERFLOW]: 'max file size is 30MB.',
   [RDCRemotelyPastingCodes.TIMEOUT]: 'transmission timeout.',
-  [RDCRemotelyPastingCodes.UNSUPPORTED_FILE_TYPE]: 'pasting folder is not support.',
+  [RDCRemotelyPastingCodes.UNSUPPORTED_FILE_TYPE]: 'pasting folder is not supported.',
 };
 
 export const Host: FC = () => {
