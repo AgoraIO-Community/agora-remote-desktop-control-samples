@@ -14,7 +14,7 @@
     "vite-plugin-commonjs-externals": "^0.1.1"
   },
   "dependencies": {
-    "agora-rdc-webrtc-electron": "^1.0.0-alpha.6",
+    "agora-rdc-webrtc-electron": "^1.0.0",
     "agora-rtc-sdk-ng": "^4.6.3",
     "querystring": "^0.2.1"
   }
