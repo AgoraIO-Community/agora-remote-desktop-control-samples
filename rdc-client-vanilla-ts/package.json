@@ -2,6 +2,7 @@
   "name": "rdc-client-vanilla-ts",
   "version": "0.0.0",
   "main": "build/electron/main.js",
+  "private":"true",
   "scripts": {
     "start": "concurrently \"vite\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
     "build": "vite build && tsc -p electron && electron-builder"
