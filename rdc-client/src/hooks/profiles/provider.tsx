@@ -24,9 +24,14 @@ export const ProfilesProvider: FC<ProfilesProviderProps> = ({ userId, children }
   );
 
   const handleStreamJoined = useCallback(
-    (streamIdentifier: number | IAgoraRTCRemoteUser) => {
+    (streamIdentifier: number | IAgoraRTCRemoteUser, screenStreamId?:number) => {
       if (typeof streamIdentifier === 'number' && session?.screenStreamId !== streamIdentifier) {
         setScreenStreamIds([...screenStreamIds, streamIdentifier]);
+        return;
+      }
+      // handle for 3.6.205-build.1029
+      if (typeof screenStreamId === 'number' && session?.screenStreamId !== screenStreamId) {
+        setScreenStreamIds([...screenStreamIds, screenStreamId]);
         return;
       }
       const remoteUser = streamIdentifier as IAgoraRTCRemoteUser;
@@ -36,9 +41,14 @@ export const ProfilesProvider: FC<ProfilesProviderProps> = ({ userId, children }
   );
 
   const handleStreamLeft = useCallback(
-    (streamIdentifier: number | IAgoraRTCRemoteUser) => {
+    (streamIdentifier: number | IAgoraRTCRemoteUser, screenStreamId?: number) => {
       if (typeof streamIdentifier === 'number') {
         setScreenStreamIds(screenStreamIds.filter((streamId) => streamId === streamIdentifier));
+        return;
+      }
+      // handle for 3.6.205-build.1029
+      if (typeof screenStreamId === 'number' && session?.screenStreamId !== screenStreamId) {
+        setScreenStreamIds([...screenStreamIds, screenStreamId]);
         return;
       }
       const remoteUser = streamIdentifier as IAgoraRTCRemoteUser;

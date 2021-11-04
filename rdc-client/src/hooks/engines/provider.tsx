@@ -27,8 +27,8 @@ export const EnginesProvider: FC = ({ children }) => {
     const { appId, rdcRole } = session;
     if (rtcEngineType === 'electron') {
       const rtcEngine = new AgoraRtcEngine();
-      rtcEngine.initialize(appId, 1, { filePath: `${LOGS_FOLDER}/agora_rtc_sdk.log`, level: 1, fileSize: 2048 });
-      rtcEngine.videoSourceSetLogFile(`${LOGS_FOLDER}/agora_rtc_sdk_video_source.log`);
+      rtcEngine.initialize(appId, 1, { filePath: `${LOGS_FOLDER}/agora_rtc_sdk.log`, level: 1, fileSizeInKB: 2048 });
+      // rtcEngine.videoSourceSetLogFile(`${LOGS_FOLDER}/agora_rtc_sdk_video_source.log`);
       const rdcEngine = RDCEngineWithElectronRTC.create(rtcEngine, {
         role: rdcRole,
         appId,

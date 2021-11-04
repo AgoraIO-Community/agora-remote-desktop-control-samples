@@ -18,7 +18,7 @@
     "clean": "rimraf ./build ./dist"
   },
   "dependencies": {
-    "agora-electron-sdk": "3.4.7-rc.1-build.817",
+    "agora-electron-sdk": "3.6.205-build.1029",
     "agora-rdc-electron": "^1.0.0",
     "agora-rdc-webrtc-electron": "^1.0.0",
     "agora-rtc-sdk-ng": "^4.6.3",
