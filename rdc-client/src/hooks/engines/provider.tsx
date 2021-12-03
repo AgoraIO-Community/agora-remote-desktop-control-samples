@@ -67,6 +67,9 @@ export const EnginesProvider: FC = ({ children }) => {
       rtcEngine.setChannelProfile(0);
       rtcEngine.setClientRole(1);
       rtcEngine.enableVideo();
+      rtcEngine.enableAudio();
+      rtcEngine.muteLocalAudioStream(true);
+      rtcEngine.muteLocalVideoStream(true);
       rtcEngine.joinChannel(cameraStreamToken, channel, '', cameraStreamId);
     }
     if (rtcEngineType === 'web') {

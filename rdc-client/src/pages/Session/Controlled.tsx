@@ -119,7 +119,7 @@ export const Controlled: FC = () => {
         return;
       }
 
-      rdcEngine.authorizeControl(userIdControlledBy, display, rdcDisplayConfiguration);
+      rdcEngine.authorizeControl(userIdControlledBy, display, rdcDisplayConfiguration, true);
       setVisible(false);
       message.warn({
         content: (
