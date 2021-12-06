@@ -24,18 +24,25 @@ export const ProfilesProvider: FC<ProfilesProviderProps> = ({ userId, children }
   );
 
   const handleStreamJoined = useCallback(
-    (streamIdentifier: number | IAgoraRTCRemoteUser, screenStreamId?:number) => {
-      if (typeof streamIdentifier === 'number' && session?.screenStreamId !== streamIdentifier) {
-        setScreenStreamIds([...screenStreamIds, streamIdentifier]);
+    (streamIdentifier: number | IAgoraRTCRemoteUser, screenStreamId?: number) => {
+      let streamId: number | undefined;
+      // handle for agora-rtc-sdk-ng;
+      if (typeof streamIdentifier === 'number') {
+        streamId = streamIdentifier;
+      }
+      // handle for agora-electron-sdk <= 3.5.1 && >= 2.8.0
+      if (typeof streamIdentifier === 'object' && typeof screenStreamId === 'undefined') {
+        const remoteUser = streamIdentifier as IAgoraRTCRemoteUser;
+        streamId = remoteUser.uid as number;
+      }
+      // handle for agora-electron-sdk >= 3.6.0
+      if (typeof streamIdentifier === 'object' && typeof screenStreamId === 'number') {
+        streamId = screenStreamId;
+      }
+      if (!streamId || session?.screenStreamId === streamId) {
         return;
       }
-      // handle for 3.6.205-build.1029
-      if (typeof screenStreamId === 'number' && session?.screenStreamId !== screenStreamId) {
-        setScreenStreamIds([...screenStreamIds, screenStreamId]);
-        return;
-      }
-      const remoteUser = streamIdentifier as IAgoraRTCRemoteUser;
-      setScreenStreamIds([...screenStreamIds, remoteUser.uid as number]);
+      setScreenStreamIds([...screenStreamIds, streamId]);
     },
     [session, screenStreamIds, setScreenStreamIds],
   );
