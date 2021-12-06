@@ -61,7 +61,7 @@ export const ProfilesProvider: FC<ProfilesProviderProps> = ({ userId, children }
       const remoteUser = streamIdentifier as IAgoraRTCRemoteUser;
       setScreenStreamIds(screenStreamIds.filter((streamId) => streamId !== remoteUser.uid));
     },
-    [screenStreamIds, setScreenStreamIds],
+    [screenStreamIds, session?.screenStreamId],
   );
 
   useEffect(() => {
