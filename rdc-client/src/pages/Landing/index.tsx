@@ -7,8 +7,16 @@ import { joinSession, JoinSessionParams } from '../../api';
 import { HostOptions, ControlledOptions } from '../../interfaces';
 import { FRAME_RATES, RESOLUTION_BITRATE } from '../../constants';
 
-const DEFAULT_HOST_OPTIONS: HostOptions = { mouseEventsThreshold: 30, keyboardEventsThreshold: 30, rtcEngineType: 'web' };
-const DEFAULT_CONTROLLED_OPTIONS: ControlledOptions = { resolutionBitrate: '1080p2000', rtcEngineType: 'web', frameRate: 60 };
+const DEFAULT_HOST_OPTIONS: HostOptions = {
+  mouseEventsThreshold: 30,
+  keyboardEventsThreshold: 30,
+  rtcEngineType: 'web',
+};
+const DEFAULT_CONTROLLED_OPTIONS: ControlledOptions = {
+  resolutionBitrate: '1080p2000',
+  rtcEngineType: 'web',
+  frameRate: 60,
+};
 
 const Landing: FC = () => {
   const history = useHistory();
@@ -88,62 +96,65 @@ const Landing: FC = () => {
         title="RDC Options"
         visible={visible}
         closable={false}
+        forceRender={true}
         onCancel={handleOptionsCancel}
         onOk={handleOptionsOk}>
         <>
-          {role === RDCRoleType.HOST ? (
-            <Form labelCol={{ span: 12 }} form={hostForm}>
-              <Form.Item label="RTC SDK" name="rtcEngineType">
-                <Select>
-                  <Select.Option value="electron">agora-sdk-electron</Select.Option>
-                  <Select.Option value="web">agora-rtc-sdk-ng</Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item
-                label="Mouse Events Threshold(ms)"
-                name="mouseEventsThreshold"
-                rules={[{ type: 'number', min: 0, max: 500, message: 'Mouse Events Threshold must be in 0 ~ 500' }]}>
-                <InputNumber style={{ width: '100%' }} step={10} />
-              </Form.Item>
-              <Form.Item
-                label="Keyboard Events Threshold(ms)"
-                name="keyboardEventsThreshold"
-                rules={[{ type: 'number', min: 0, max: 500, message: 'Mouse Events Threshold must be in 0 ~ 500' }]}>
-                <InputNumber style={{ width: '100%' }} step={10} />
-              </Form.Item>
-            </Form>
-          ) : null}
-          {role === RDCRoleType.CONTROLLED ? (
-            <Form labelCol={{ span: 10 }} form={controlledForm}>
-              <Form.Item label="RTC SDK" name="rtcEngineType">
-                <Select>
-                  <Select.Option value="electron">agora-sdk-electron</Select.Option>
-                  <Select.Option value="web">agora-rtc-sdk-ng</Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item label="Resolution and Bitrate" name="resolutionBitrate">
-                <Select>
-                  {Object.keys(RESOLUTION_BITRATE).map((key) => {
-                    const { width, height, bitrate } = RESOLUTION_BITRATE[key];
-                    return (
-                      <Select.Option value={key} key={key}>
-                        {width} x {height}, {bitrate} bps
-                      </Select.Option>
-                    );
-                  })}
-                </Select>
-              </Form.Item>
-              <Form.Item label="Framerate" name="frameRate">
-                <Select>
-                  {FRAME_RATES.map((rate) => (
-                    <Select.Option value={rate} key={rate}>
-                      {rate} fps
+          <Form
+            labelCol={{ span: 12 }}
+            form={hostForm}
+            style={{ display: role === RDCRoleType.HOST ? 'block' : 'none' }}>
+            <Form.Item label="RTC SDK" name="rtcEngineType">
+              <Select>
+                <Select.Option value="electron">agora-sdk-electron</Select.Option>
+                <Select.Option value="web">agora-rtc-sdk-ng</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Mouse Events Threshold(ms)"
+              name="mouseEventsThreshold"
+              rules={[{ type: 'number', min: 0, max: 500, message: 'Mouse Events Threshold must be in 0 ~ 500' }]}>
+              <InputNumber style={{ width: '100%' }} step={10} />
+            </Form.Item>
+            <Form.Item
+              label="Keyboard Events Threshold(ms)"
+              name="keyboardEventsThreshold"
+              rules={[{ type: 'number', min: 0, max: 500, message: 'Mouse Events Threshold must be in 0 ~ 500' }]}>
+              <InputNumber style={{ width: '100%' }} step={10} />
+            </Form.Item>
+          </Form>
+          <Form
+            labelCol={{ span: 10 }}
+            form={controlledForm}
+            style={{ display: role === RDCRoleType.CONTROLLED ? 'block' : 'none' }}>
+            <Form.Item label="RTC SDK" name="rtcEngineType">
+              <Select>
+                <Select.Option value="electron">agora-sdk-electron</Select.Option>
+                <Select.Option value="web">agora-rtc-sdk-ng</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item label="Resolution and Bitrate" name="resolutionBitrate">
+              <Select>
+                {Object.keys(RESOLUTION_BITRATE).map((key) => {
+                  const { width, height, bitrate } = RESOLUTION_BITRATE[key];
+                  return (
+                    <Select.Option value={key} key={key}>
+                      {width} x {height}, {bitrate} bps
                     </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Form>
-          ) : null}
+                  );
+                })}
+              </Select>
+            </Form.Item>
+            <Form.Item label="Framerate" name="frameRate">
+              <Select>
+                {FRAME_RATES.map((rate) => (
+                  <Select.Option value={rate} key={rate}>
+                    {rate} fps
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Form>
         </>
       </Modal>
       <Form
