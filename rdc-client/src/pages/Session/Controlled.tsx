@@ -63,7 +63,7 @@ export const Controlled: FC = () => {
 
   const handleQuitControl = useCallback(
     (userId: string) => {
-      if (!rdcEngine || !profiles) {
+      if (!rdcEngine || !profiles || userIdControlledBy !== userId) {
         return;
       }
       const profile = profiles.find((p) => p.userId === userId);
