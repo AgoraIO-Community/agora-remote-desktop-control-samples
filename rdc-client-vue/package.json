@@ -1,0 +1,112 @@
+{
+  "name": "rdc-client-vue",
+  "main": "build/electron/main.js",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "concurrently \"vue-cli-service serve\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
+    "build": "vue-cli-service build build && tsc -p electron && electron-builder",
+    "serve": "vue-cli-service serve",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@ant-design/icons-vue": "^6.0.1",
+    "@vueuse/core": "^7.1.2",
+    "agora-electron-sdk": "3.6.205-build.1123",
+    "agora-rdc-electron": "^2.0.0-alpha.1",
+    "agora-rdc-webrtc-electron": "^1.0.0",
+    "agora-rtc-sdk-ng": "^4.6.3",
+    "ant-design-vue": "^3.0.0-alpha.14",
+    "core-js": "^3.6.5",
+    "vue": "^3.2.16",
+    "vue-router": "4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/eslint-config-typescript": "^7.0.0",
+    "concurrently": "^6.2.0",
+    "cross-env": "^7.0.3",
+    "electron": "7.1.2",
+    "electron-builder": "22.11.11",
+    "eslint": "^6.7.2",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-vue": "^7.0.0",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2",
+    "typescript": "~4.1.5"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended",
+      "@vue/typescript/recommended",
+      "@vue/prettier",
+      "@vue/prettier/@typescript-eslint"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "build": {
+    "extends": null,
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/agora-rdc-core/**/*",
+      "node_modules/agora-electron-sdk/**/*"
+    ],
+    "afterPack": "./after-pack.js",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "!**/node_modules/**/{CHANGELOG.md,README.md,README,readme.md,README.zh.md}",
+      "!**/node_modules/**/{nodemon.json,rollup.config.js,tsconfig.json,typedoc.json,rc_message.proto}",
+      "!**/node_modules/**/*.{ts,h,cc,cpp,gyp,map,hpp,mm,proto,cmd,tar.gz,a,la,inc,pc,dSYM}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ],
+    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-electron-${env.ELECTRON_VERSION}-${os}-${arch}.${ext}",
+    "productName": "RDCClientVue",
+    "appId": "io.agora.rdc-client-vue",
+    "mac": {
+      "target": "dmg",
+      "entitlements": "entitlements.mac.plist",
+      "hardenedRuntime": true
+    },
+    "win": {
+      "target": "nsis",
+      "requestedExecutionLevel": "requireAdministrator"
+    },
+    "nsis": {
+      "license": "./eula.txt"
+    }
+  },
+  "agora_electron": {
+    "electron_version": "7.1.2",
+    "prebuilt": true,
+    "arch": "x64"
+  }
+}
