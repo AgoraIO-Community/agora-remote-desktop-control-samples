@@ -8,7 +8,7 @@ import { useLocalStorage } from '@vueuse/core';
 import { joinSession, JoinSessionParams } from '../../api';
 import { HostOptions, ControlledOptions } from '../../interfaces';
 import { RESOLUTION_BITRATE } from '../../constants';
-import { FRAME_RATES } from '../../../../rdc-client/src/constants';
+import { FRAME_RATES } from '../../constants';
 
 const DEFAULT_HOST_OPTIONS: HostOptions = {
   mouseEventsThreshold: 30,

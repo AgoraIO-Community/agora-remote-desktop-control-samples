@@ -5,7 +5,7 @@ const session = useSession();
 </script>
 
 <template lang="html">
-  <div className="channel">CHANNEL: {{ session?.channel }}</div>
+  <div class="channel">CHANNEL: {{ session?.channel }}</div>
 </template>
 
 <style lang="css" scoped>
