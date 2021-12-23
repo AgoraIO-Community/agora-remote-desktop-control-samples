@@ -1,0 +1,89 @@
+<nz-affix style="position: absolute; right: 10px; top: 10px">
+  <button nz-button [nzShape]="'circle'" [nzType]="'dashed'" (click)="toggleVisible()" [disabled]="!role">
+    <i nz-icon nzType="setting" nzTheme="outline"></i>
+  </button>
+</nz-affix>
+<nz-modal [(nzVisible)]="visible" [nzTitle]="'RDC Options'" [nzClosable]="false" (nzOnCancel)="toggleVisible()"
+  (nzOnOk)="handleOk()">
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="hostOptsForm" [style.display]="hostOptsVisible ? 'block': 'none'">
+      <nz-form-item nz-row>
+        <nz-form-label [nzSpan]="12" nzRequired>RTC SDK</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Please select RTC SDK!">
+          <nz-select formControlName="rtcEngineType">
+            <nz-option [nzValue]="'electron'" [nzLabel]="'agora-sdk-electron'"></nz-option>
+            <nz-option [nzValue]="'web'" [nzLabel]="'agora-rtc-sdk-ng'"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item nz-row>
+        <nz-form-label [nzSpan]="12" nzRequired>Mouse Events Threshold (ms)</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Please input mouse events threshold!">
+          <nz-input-number [nzMin]="30" [nzMax]="300" [nzStep]="10" formControlName="mouseEventsThreshold"
+            style="width: 100%;"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item nz-row>
+        <nz-form-label [nzSpan]="12" nzRequired>Keyboard Events Threshold(ms)</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Please input keyboard events threshold!">
+          <nz-input-number [nzMin]="30" [nzMax]="300" [nzStep]="10" formControlName="keyboardEventsThreshold"
+            style="width: 100%;"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+    <form nz-form [formGroup]="controlledOptsForm" [style.display]="controlledOptsVisible ? 'block': 'none'">
+      <nz-form-item nz-row>
+        <nz-form-label [nzSpan]="12" nzRequired>RTC SDK</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Please select RTC SDK!">
+          <nz-select formControlName="rtcEngineType">
+            <nz-option [nzValue]="'electron'" [nzLabel]="'agora-sdk-electron'"></nz-option>
+            <nz-option [nzValue]="'web'" [nzLabel]="'agora-rtc-sdk-ng'"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item nz-row>
+        <nz-form-label [nzSpan]="12" nzRequired>Resolution and Bitrate</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Please select resolution and bitrate!">
+          <nz-select formControlName="resolutionBitrate">
+            <nz-option *ngFor="let opts of resolutionBitrateOpts" [nzValue]="opts.value" [nzLabel]="opts.label">
+            </nz-option>
+          </nz-select>
+
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item nz-row>
+        <nz-form-label [nzSpan]="12" nzRequired>Frame rate</nz-form-label>
+        <nz-form-control [nzSpan]="12" nzErrorTip="Please input frame rate!">
+          <input nz-input formControlName="frameRate" />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
+<form nz-form [formGroup]="landingForm" [nzLayout]="'horizontal'" style="margin-top: 160px;">
+  <nz-form-item nz-row>
+    <nz-form-label [nzSpan]="8" nzRequired>Role</nz-form-label>
+    <nz-form-control [nzSpan]="8" nzErrorTip="Please select role!" nzHasFeedback>
+      <nz-select formControlName="role" [(ngModel)]="role">
+        <nz-option *ngFor="let role of roleOpts" [nzValue]="role.value" [nzLabel]="role.label"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item nz-row>
+    <nz-form-label [nzSpan]="8" nzRequired>Channel</nz-form-label>
+    <nz-form-control [nzSpan]="8" nzErrorTip="Please input channel!" nzHasFeedback>
+      <input nz-input formControlName="channel" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item nz-row>
+    <nz-form-label [nzSpan]="8" nzRequired>Name</nz-form-label>
+    <nz-form-control [nzSpan]="8" nzErrorTip="Please input name!" nzHasFeedback>
+      <input nz-input formControlName="name" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item nz-row>
+    <nz-col [nzSpan]="8" [nzOffset]="8">
+      <button nz-button [nzType]="'primary'" [nzBlock]="true" (click)="handleJoin()">JOIN</button>
+    </nz-col>
+  </nz-form-item>
+</form>
