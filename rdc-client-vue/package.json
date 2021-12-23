@@ -108,5 +108,11 @@
     "electron_version": "7.1.2",
     "prebuilt": true,
     "arch": "x64"
+  },
+  "workspaces": {
+    "nohoist": [
+      "**/@vue/cli-plugin-eslint",
+      "**/@vue/cli-plugin-eslint/**"
+    ]
   }
 }
