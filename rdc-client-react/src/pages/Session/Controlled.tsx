@@ -75,7 +75,7 @@ export const Controlled: FC = () => {
       message.info(`${profile.name} is released control.`);
       setUserIdControlledBy(undefined);
     },
-    [rdcEngine, profiles],
+    [rdcEngine, profiles, userIdControlledBy],
   );
 
   const handleStopControl = useCallback(() => {
