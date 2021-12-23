@@ -10,3 +10,5 @@ log
 .DS_Store
 agoraAddonlog.txt
 *.dmp
+*.txt
+.angular
