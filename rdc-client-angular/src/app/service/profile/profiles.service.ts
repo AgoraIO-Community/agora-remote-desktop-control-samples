@@ -21,9 +21,10 @@ export class ProfilesService {
   constructor(private engines: EnginesService, private api: APIService) {}
 
   subscribe(userId: string, options: HostOptions | ControlledOptions) {
-    this.engines.rtcEngine.subscribe((rtcEngine) => {
+    const { rtcEngine } = this.engines;
+    if (rtcEngine) {
       this.bindEvents(rtcEngine, options);
-    });
+    }
     this.streamIdsJoinedSubject.subscribe(async (streamIds) => {
       const profiles = await lastValueFrom(this.api.fetchProfiles(userId));
       this.profilesSubject.next(profiles.filter((profile) => streamIds.includes(profile.screenStreamId)));

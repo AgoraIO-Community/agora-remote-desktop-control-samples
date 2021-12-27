@@ -4,10 +4,8 @@ import { AgoraRemoteDesktopControl as RDCEngineWithElectronRTC } from 'agora-rdc
 import { AgoraRemoteDesktopControl as RDCEngineWithWebRTC } from 'agora-rdc-webrtc-electron';
 import AgoraRtcEngine from 'agora-electron-sdk';
 import AgoraRTC, { IAgoraRTCClient } from 'agora-rtc-sdk-ng';
-import { mergeMap, Subject, forkJoin, Observable } from 'rxjs';
-import { APIService, Session } from '../api/api.service';
+import { Session } from '../api/api.service';
 import { Options } from '../../interfaces';
-import { ParametersService } from '../parameters/parameters.service';
 
 export type RTCEngine = AgoraRtcEngine | IAgoraRTCClient;
 
@@ -22,26 +20,12 @@ const LOGS_FOLDER = isMacOS ? `${window.process.env['HOME']}/Library/Logs/RDCCli
 })
 @NgModule()
 export class EnginesService {
-  get rtcEngine(): Observable<RTCEngine> {
-    return this.rtcEngineSubject.asObservable();
-  }
-
-  get rdcEngine(): Observable<RDCEngine> {
-    return this.rdcEngineSubject.asObservable();
-  }
-
-  private rtcEngineSubject: Subject<RTCEngine> = new Subject();
-  private rdcEngineSubject: Subject<RDCEngine> = new Subject();
+  rtcEngine?: RTCEngine;
+  rdcEngine?: RDCEngine;
 
   constructor() {}
 
-  ignite(
-    session: Session,
-    options: Options,
-  ): {
-    rtcEngine: Observable<RTCEngine>;
-    rdcEngine: Observable<RDCEngine>;
-  } {
+  ignite(session: Session, options: Options) {
     const {
       appId,
       rdcRole,
@@ -73,24 +57,11 @@ export class EnginesService {
 
     if (rtcEngineType === 'web') {
       rtcEngine = AgoraRTC.createClient({ role: 'host', mode: 'rtc', codec: 'av1' });
-      this.rtcEngineSubject.next(rtcEngine);
-
       rdcEngine = RDCEngineWithWebRTC.create(rtcEngine, {
         role: rdcRole,
         appId,
         ...resetOpts,
       });
-    }
-
-    if (rdcEngine) {
-      this.rdcEngineSubject.next(rdcEngine);
-      this.rdcEngineSubject.complete();
-      debugger;
-    }
-
-    if (rtcEngine) {
-      this.rtcEngineSubject.next(rtcEngine);
-      this.rtcEngineSubject.complete();
     }
 
     if (rdcEngine) {
@@ -106,9 +77,12 @@ export class EnginesService {
       rtcEngine.joinChannel(cameraStreamToken, channel, '', cameraStreamId);
     }
 
-    return {
-      rtcEngine: this.rtcEngine,
-      rdcEngine: this.rdcEngine,
-    };
+    if (rdcEngine) {
+      this.rdcEngine = rdcEngine;
+    }
+
+    if (rtcEngine) {
+      this.rtcEngine = rtcEngine;
+    }
   }
 }

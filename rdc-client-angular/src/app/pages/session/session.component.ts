@@ -38,7 +38,7 @@ export class SessionComponent implements OnInit {
     this.options = await this.parametersService.getOptions(this.activatedRoute);
     this.session = await lastValueFrom(this.apiService.fetchSession(this.userId));
 
-    this.profilesService.subscribe(this.userId, this.options);
     this.enginesService.ignite(this.session, this.options);
+    this.profilesService.subscribe(this.userId, this.options);
   }
 }

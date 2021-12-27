@@ -9,22 +9,16 @@ import { EnginesService, RDCEngine } from '../../../service/engines/engines.serv
 })
 export class HostComponent implements OnInit {
   userIdsUnderControl: number[] = [];
-  rdcEngine?: RDCEngine;
 
   constructor(private enginesService: EnginesService) {}
 
-  ngOnInit(): void {
-    debugger;
-    this.enginesService.rdcEngine.subscribe((rdcEngine) => {
-      this.rdcEngine = rdcEngine;
-    });
-  }
+  ngOnInit(): void {}
 
   handleRequestControl(profile: Profile) {
-    this.rdcEngine?.requestControl(profile.userId);
+    this.enginesService.rdcEngine?.requestControl(profile.userId);
   }
 
   handleQuitControl(profile: Profile) {
-    this.rdcEngine?.quitControl(profile.userId, profile.rdcRole);
+    this.enginesService.rdcEngine?.quitControl(profile.userId, profile.rdcRole);
   }
 }
