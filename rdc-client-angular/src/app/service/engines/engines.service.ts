@@ -85,6 +85,7 @@ export class EnginesService {
     if (rdcEngine) {
       this.rdcEngineSubject.next(rdcEngine);
       this.rdcEngineSubject.complete();
+      debugger;
     }
 
     if (rtcEngine) {

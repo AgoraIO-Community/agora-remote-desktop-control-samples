@@ -1,0 +1,20 @@
+<nz-drawer [nzClosable]="false" [nzVisible]="visible" [nzWidth]="500" [nzMaskClosable]="true" nzPlacement="right"
+  (nzOnClose)="toggleVisible()">
+  <ng-container *nzDrawerContent>
+    <nz-list nzItemLayout="horizontal">
+      <nz-list-item *ngFor="let profile of profiles">
+        <div>
+          <span style="margin-right: 10px">{{ profile.name }}</span>
+          <ng-container [ngTemplateOutlet]="actionTemplate" [ngTemplateOutletContext]="{$implicit: profile}">
+          </ng-container>
+        </div>
+      </nz-list-item>
+    </nz-list>
+  </ng-container>
+</nz-drawer>
+
+<nz-affix style="position: absolute; right: 10px; bottom: 20px">
+  <button nz-button nzType="primary" nzShape="circle" (click)="toggleVisible()">
+    <i nz-icon nzType="user" nzTheme="outline"></i>
+  </button>
+</nz-affix>

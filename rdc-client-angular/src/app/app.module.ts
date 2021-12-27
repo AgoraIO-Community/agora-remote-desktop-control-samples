@@ -14,6 +14,8 @@ import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzDrawerModule} from 'ng-zorro-antd/drawer'
+import { NzListModule } from 'ng-zorro-antd/list'
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,12 +24,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LandingComponent } from './pages/landing/landing.component';
 import { SessionComponent } from './pages/session/session.component';
 import { ServiceModule } from './service/service.module';
-
+import { ProfilesComponent } from './pages/session/profiles/profiles.component';
+import { HostComponent } from './pages/session/host/host.component';
 
 registerLocaleData(en);
-
 @NgModule({
-  declarations: [AppComponent, LandingComponent, SessionComponent],
+  declarations: [AppComponent, LandingComponent, SessionComponent, ProfilesComponent, HostComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -44,6 +46,8 @@ registerLocaleData(en);
     NzIconModule,
     NzModalModule,
     NzInputNumberModule,
+    NzDrawerModule,
+    NzListModule,
     ServiceModule,
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],

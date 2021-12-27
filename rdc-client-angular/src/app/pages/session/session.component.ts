@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { RDCRoleType } from 'agora-rdc-core';
 import { lastValueFrom } from 'rxjs';
 import { ControlledOptions, HostOptions } from 'src/app/interfaces';
-import { APIService, Profile, Session } from '../../service/api/api.service';
+import { APIService, Session } from '../../service/api/api.service';
 import { EnginesService } from '../../service/engines/engines.service';
 import { ParametersService } from '../../service/parameters/parameters.service';
 import { ProfilesService } from '../../service/profile/profiles.service';
@@ -16,7 +17,9 @@ export class SessionComponent implements OnInit {
   userId?: string;
   session?: Session;
   options?: HostOptions | ControlledOptions;
-  profiles: Profile[] = [];
+  get RDCRoleType() {
+    return RDCRoleType
+  }
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -37,8 +40,5 @@ export class SessionComponent implements OnInit {
 
     this.profilesService.subscribe(this.userId, this.options);
     this.enginesService.ignite(this.session, this.options);
-    this.profilesService.profiles.subscribe((profiles: Profile[]) => {
-      this.profiles = profiles;
-    });
   }
 }

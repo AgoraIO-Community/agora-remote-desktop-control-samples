@@ -1,4 +1,4 @@
 <div class="session">
-
+    <app-host *ngIf="session?.rdcRole === RDCRoleType.HOST"></app-host>
     <div class="channel">CHANNEL: {{ session?.channel }}</div>
 </div>

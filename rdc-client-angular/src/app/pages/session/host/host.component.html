@@ -1,0 +1,10 @@
+<p>
+  <app-profiles>
+    <ng-template #action let-profile>
+      <button nz-button nzType="link" (click)="handleRequestControl(profile)"
+        [disabled]="userIdsUnderControl.includes(profile.userId)">Request Control</button>
+      <button nz-button nzType="link" (click)="handleQuitControl(profile)"
+        [disabled]="!userIdsUnderControl.includes(profile.userId)">Quit Control</button>
+    </ng-template>
+  </app-profiles>
+</p>
