@@ -24,6 +24,15 @@
   top: 5px;
   right: 10px;
 }
+.rdc-client-screen-wrap .action-bar {
+  display: flex;
+  padding: 8px 0;
+  justify-content: center;
+}
+
+.rdc-client-screen-wrap .action-bar .ant-btn {
+  margin-right: 4px;
+}
 
 .rdc-client .channel {
   position: fixed;
