@@ -54,7 +54,7 @@ export const ACTION_MAPS = [
     icon: <LockOutlined />,
   },
   {
-    tip: 'screenshot',
+    tip: 'Screenshot',
     action: RDCAndroidAction.ACTION_SCREENSHOT,
     icon: <CameraOutlined />,
   },
