@@ -1,10 +1,17 @@
-<p>
-  <app-profiles>
-    <ng-template #action let-profile>
-      <button nz-button nzType="link" (click)="handleRequestControl(profile)"
-        [disabled]="userIdsUnderControl.includes(profile.userId)">Request Control</button>
-      <button nz-button nzType="link" (click)="handleQuitControl(profile)"
-        [disabled]="!userIdsUnderControl.includes(profile.userId)">Quit Control</button>
-    </ng-template>
-  </app-profiles>
-</p>
+<ng-template #indicatorTemplate><i nz-icon nzType="loading"></i></ng-template>
+
+<nz-tabset [nzTabBarStyle]="{margin: '0px'}">
+  <nz-tab *ngFor="let profile of profilesUnderControl" [nzTitle]="profile.name">
+    <nz-spin [nzSpinning]="pasting" [nzIndicator]="indicatorTemplate" nzTip="File is pasting...">
+      <app-controller [userId]="profile.userId" [streamId]="profile.screenStreamId"></app-controller>
+    </nz-spin>
+  </nz-tab>
+</nz-tabset>
+<app-profiles>
+  <ng-template #action let-profile>
+    <button nz-button nzType="link" (click)="handleRequestControl(profile)"
+      [disabled]="userIdsUnderControl.includes(profile.userId)">Request Control</button>
+    <button nz-button nzType="link" (click)="handleQuitControl(profile)"
+      [disabled]="!userIdsUnderControl.includes(profile.userId)">Quit Control</button>
+  </ng-template>
+</app-profiles>

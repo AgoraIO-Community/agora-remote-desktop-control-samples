@@ -1,0 +1,10 @@
+<div class="rdc-client-screen-wrap">
+  <div class="rdc-screen" [ngStyle]="{height: height, width: width}" #attachEl>
+  </div>
+  <div class="control-bar">
+    <button nz-button nzType="primary" nzShape="circle" (click)="toggleFullScreen()">
+      <i nz-icon nzType="fullscreen" *ngIf="isFullscreen" nzTheme="outline"></i>
+      <i nz-icon nzType="fullscreen-exit" *ngIf="!isFullscreen" nzTheme="outline"></i>
+    </button>
+  </div>
+</div>

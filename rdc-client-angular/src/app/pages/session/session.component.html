@@ -1,4 +1,5 @@
-<div class="session">
+<div class="rdc-client">
     <app-host *ngIf="session?.rdcRole === RDCRoleType.HOST"></app-host>
+    <app-controlled *ngIf="session?.rdcRole === RDCRoleType.CONTROLLED"></app-controlled>
     <div class="channel">CHANNEL: {{ session?.channel }}</div>
 </div>

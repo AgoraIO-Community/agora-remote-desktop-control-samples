@@ -1,10 +1,9 @@
-.session {
-  height: 100vh;
-  width: 100vw;
-  background-color: #000;
+.rdc-client {
+  height: '100vh';
+  width: '100vw';
 }
 
-.channel {
+.rdc-client .channel {
   position: fixed;
   display: inline-block;
   bottom: 2px;
@@ -13,4 +12,12 @@
   padding: 4px 8px;
   color: #1890ff;
   background-color: rgba(0, 0, 0, 0.3);
+}
+
+.rdc-client .ant-spin-blur {
+  opacity: 0.5;
+}
+
+.rdc-client .ant-spin-nested-loading > div > .ant-spin .ant-spin-text {
+  text-shadow: none;
 }

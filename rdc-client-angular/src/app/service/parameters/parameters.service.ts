@@ -14,7 +14,7 @@ export class ParametersService {
     return params['userId'] as string;
   }
 
-  async getOptions<T extends Options>(activeRoute: ActivatedRoute): Promise<Options> {
+  async getOptions<T extends Options>(activeRoute: ActivatedRoute): Promise<T> {
     const queryParams = await firstValueFrom(activeRoute.queryParams);
     return JSON.parse(window.atob(queryParams['opts'] as string)) as T;
   }

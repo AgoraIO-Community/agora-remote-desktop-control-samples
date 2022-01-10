@@ -1,0 +1,25 @@
+.rdc-client-screen-wrap {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+}
+
+.rdc-client-screen-wrap .rdc-screen {
+  margin: 3px 0;
+}
+
+.rdc-client-screen-wrap .control-bar {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+.rdc-client-screen-wrap .action-bar {
+  display: flex;
+  padding: 8px 0;
+  justify-content: center;
+}
+
+.rdc-client-screen-wrap .action-bar .ant-btn {
+  margin-right: 4px;
+}
