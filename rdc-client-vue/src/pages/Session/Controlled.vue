@@ -8,7 +8,7 @@ import { useEngines } from '../../hooks/engines';
 import { useProfiles } from '../../hooks/profiles';
 import { useRDCDisplayConfiguration } from '../../hooks/options';
 import Profiles from './Profiles.vue';
-import { Profile } from '../../../../rdc-client/src/api';
+import { Profile } from '../../api';
 import Observer from './Observer.vue';
 
 const session = useSession();
@@ -95,7 +95,7 @@ const handleAuthorize = (display: RDCDisplay) => {
 const doubleConfirm = (profile: Profile) => {
   Modal.confirm({
     title: 'Are you sure to quit control?',
-    content: `You will not be able to control ${profile.name}'s  computer anymore.`,
+    content: `${profile.name} will not be able to control your computer anymore.`,
     okText: 'Yes',
     cancelText: 'No',
     onOk: () => {
