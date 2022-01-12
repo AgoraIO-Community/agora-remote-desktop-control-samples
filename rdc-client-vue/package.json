@@ -15,7 +15,7 @@
     "agora-electron-sdk": "3.6.205-build.1123",
     "agora-rdc-electron": "^2.0.0-alpha.1",
     "agora-rdc-webrtc-electron": "^1.0.0",
-    "agora-rtc-sdk-ng": "^4.6.3",
+    "agora-rtc-sdk-ng": "^4.8.1",
     "ant-design-vue": "^3.0.0-alpha.14",
     "core-js": "^3.6.5",
     "vue": "^3.2.16",

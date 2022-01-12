@@ -22,7 +22,7 @@
     "agora-electron-sdk": "3.6.205-build.1123",
     "agora-rdc-electron": "^2.0.0-alpha.1",
     "agora-rdc-webrtc-electron": "^1.0.0",
-    "agora-rtc-sdk-ng": "^4.6.3",
+    "agora-rtc-sdk-ng": "^4.8.1",
     "ng-zorro-antd": "12.1.0",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
