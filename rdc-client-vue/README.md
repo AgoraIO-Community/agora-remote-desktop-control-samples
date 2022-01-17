@@ -1,24 +1,21 @@
-# rdc-client-vue
+rdc-client-vue
+==============
 
-## Project setup
+#### NOTICE: if you are always broken with `electron` & `electron-builder` installing, please try below commands:
 ```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
+$ npm set ELECTRON_MIRROR=http://npmmirror.com/mirrors/electron/
+$ npm set ELECTRON_BUILDER_BINARIES_MIRROR=http://npmmirror.com/mirrors/electron-builder-binaries/
 ```
 
-### Compiles and minifies for production
-```
-yarn build
-```
+#### Getting start
+1. Install dependencies
+   ```sh
+   $ yarn install
+   ```
+   
+2. please modify API_HOST of [vue.config.js](vue.config.js) which is rdc-server running on.
 
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+3. Happy hacking
+   ```sh
+   $ yarn start
+   ```

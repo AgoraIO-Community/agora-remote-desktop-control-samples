@@ -1,7 +1,7 @@
 const { override, addWebpackExternals, addWebpackPlugin } = require('customize-cra');
 const webpack = require('webpack');
 
-const target = process.env.TARGET || 'dev';
+const target = process.env.TARGET || 'testing';
 
 const API_HOSTS = {
   dev: 'http://10.103.2.105:3031', // please replace ip with your local network
