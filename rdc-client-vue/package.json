@@ -4,6 +4,7 @@
   "version": "2.0.0-alpha.3",
   "private": true,
   "scripts": {
+    "update-electron": "node scripts/update-electron",
     "start": "concurrently \"vue-cli-service serve\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
     "build:testing": "vue-cli-service build build && tsc -p electron && electron-builder",
     "serve": "vue-cli-service serve",
