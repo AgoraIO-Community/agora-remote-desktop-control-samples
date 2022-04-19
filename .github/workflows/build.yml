@@ -66,13 +66,13 @@ jobs:
         with:
           name: rdc-client-electron-${{ matrix.electron }}-${{ runner.os }}
           path: |
-            rdc-client/dist/*.dmg
-            rdc-client/dist/*.exe
+            rdc-client-react/dist/*.dmg
+            rdc-client-react/dist/*.exe
 
       - name: Release artifacts
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            rdc-client/dist/*.dmg
-            rdc-client/dist/*.exe
+            rdc-client-react/dist/*.dmg
+            rdc-client-react/dist/*.exe
