@@ -1,6 +1,6 @@
 {
   "name": "rdc-client-react",
-  "version": "2.0.0-alpha.2",
+  "version": "2.0.0-alpha.3",
   "private": true,
   "license": "MIT",
   "main": "build/electron/main.js",
@@ -20,7 +20,7 @@
   "dependencies": {
     "agora-electron-sdk": "3.6.216-build.117",
     "agora-rdc-electron": "^2.0.0-alpha.1",
-    "agora-rdc-webrtc-electron": "^1.0.0",
+    "agora-rdc-webrtc-electron": "^1.0.1",
     "agora-rtc-sdk-ng": "^4.8.1",
     "antd": "^4.16.7",
     "axios": "^0.22.0",

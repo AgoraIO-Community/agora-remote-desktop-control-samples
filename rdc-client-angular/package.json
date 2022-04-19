@@ -1,6 +1,6 @@
 {
   "name": "rdc-client-angular",
-  "version": "0.0.0",
+  "version": "2.0.0-alpha.3",
   "main": "build/electron/main.js",
   "scripts": {
     "ng": "ng",
@@ -21,7 +21,7 @@
     "@angular/router": "~13.1.0",
     "agora-electron-sdk": "3.6.216-build.117",
     "agora-rdc-electron": "^2.0.0-alpha.1",
-    "agora-rdc-webrtc-electron": "^1.0.0",
+    "agora-rdc-webrtc-electron": "^1.0.1",
     "agora-rtc-sdk-ng": "^4.8.1",
     "ng-zorro-antd": "12.1.0",
     "rxjs": "~7.4.0",

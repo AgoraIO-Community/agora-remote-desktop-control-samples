@@ -1,7 +1,7 @@
 {
   "name": "rdc-client-vue",
   "main": "build/electron/main.js",
-  "version": "0.1.0",
+  "version": "2.0.0-alpha.3",
   "private": true,
   "scripts": {
     "start": "concurrently \"vue-cli-service serve\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
@@ -14,7 +14,7 @@
     "@vueuse/core": "^7.1.2",
     "agora-electron-sdk": "3.6.216-build.117",
     "agora-rdc-electron": "^2.0.0-alpha.1",
-    "agora-rdc-webrtc-electron": "^1.0.0",
+    "agora-rdc-webrtc-electron": "^1.0.1",
     "agora-rtc-sdk-ng": "^4.8.1",
     "ant-design-vue": "^3.0.0-alpha.14",
     "core-js": "^3.6.5",
