@@ -14,10 +14,11 @@
     "@ant-design/icons-vue": "^6.0.1",
     "@vueuse/core": "^7.1.2",
     "agora-electron-sdk": "3.6.216-build.117",
-    "agora-rdc-electron": "^2.0.0-alpha.1",
+    "agora-rdc-electron": "^2.0.0",
     "agora-rdc-webrtc-electron": "^1.0.1",
     "agora-rtc-sdk-ng": "^4.8.1",
     "ant-design-vue": "^3.0.0-alpha.14",
+    "axios": "^0.26.1",
     "core-js": "^3.6.5",
     "vue": "^3.2.16",
     "vue-router": "4"
