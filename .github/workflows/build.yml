@@ -26,7 +26,7 @@ jobs:
         env:
           ELECTRON_VERSION: ${{ matrix.electron }}
         run: |
-          cd rdc-client && yarn update-electron && yarn install
+          cd rdc-client-react && yarn update-electron && yarn install
 
       - name: Install the Apple certificate
         if: ${{ matrix.os == 'macos-latest' }}
@@ -55,7 +55,7 @@ jobs:
           BUILD_NUMBER: ${{ github.run_number	 }}
           ELECTRON_VERSION: ${{ matrix.electron }}
         run: |
-          cd rdc-client && yarn build:testing
+          cd rdc-client-react && yarn build:testing
 
       - name: Clean up keychain
         if: ${{ matrix.os == 'macos-latest' }}
