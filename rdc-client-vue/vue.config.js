@@ -3,6 +3,8 @@ const webpack = require('webpack');
 const API_HOST = 'https://rdc-api.gz3.agoralab.co';
 
 module.exports = {
+  outputDir: 'build',
+  publicPath: './',
   devServer: {
     port: 3000,
   },
