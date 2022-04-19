@@ -1,5 +1,5 @@
 <script lang="ts">
-import { App, defineComponent, provide, ref, watch, toRefs } from 'vue';
+import { App, defineComponent, provide, shallowRef, watch } from 'vue';
 import { RDCRoleType } from 'agora-rdc-core';
 import AgoraRtcEngine from 'agora-electron-sdk';
 import AgoraRTC from 'agora-rtc-sdk-ng';
@@ -19,7 +19,7 @@ const EnginesProvider = defineComponent({
     const rtcEngineType = useRDCEngineType();
     const session = useSession();
     const rdcOptions = useRDCThresholdOptions();
-    const engines = ref<Engines>();
+    const engines = shallowRef<Engines>();
     // initialize engines
     watch([session], () => {
       let rtcEngine: RTCEngine | undefined;
