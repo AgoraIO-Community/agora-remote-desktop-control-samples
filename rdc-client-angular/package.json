@@ -46,6 +46,50 @@
     "karma-jasmine-html-reporter": "~1.7.0",
     "typescript": "~4.5.2"
   },
+  "build": {
+    "extends": null,
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/agora-rdc-core/**/*",
+      "node_modules/agora-electron-sdk/**/*"
+    ],
+    "afterPack": "./after-pack.js",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "!**/node_modules/**/{CHANGELOG.md,README.md,README,readme.md,README.zh.md}",
+      "!**/node_modules/**/{nodemon.json,rollup.config.js,tsconfig.json,typedoc.json,rc_message.proto}",
+      "!**/node_modules/**/*.{ts,h,cc,cpp,gyp,map,hpp,mm,proto,cmd,tar.gz,a,la,inc,pc,dSYM}",
+      "!**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}",
+      "!**/node_modules/.bin",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
+    ],
+    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-electron-${env.ELECTRON_VERSION}-${os}-${arch}.${ext}",
+    "productName": "RDCClientAngular",
+    "appId": "io.agora.rdc-client-angular",
+    "mac": {
+      "target": "dmg",
+      "entitlements": "entitlements.mac.plist",
+      "hardenedRuntime": true
+    },
+    "win": {
+      "target": "nsis",
+      "requestedExecutionLevel": "requireAdministrator"
+    },
+    "nsis": {
+      "license": "./eula.txt"
+    }
+  },
+  "agora_electron": {
+    "electron_version": "7.1.2",
+    "prebuilt": true,
+    "arch": "x64"
+  },
   "workspaces": {
     "nohoist": [
       "@types/jasmine",
