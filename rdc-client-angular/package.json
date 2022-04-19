@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "concurrently \"ng serve\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
-    "build": "ng build",
+    "build:testing": "yarn clean && ng build --configuration=production && tsc -p electron && electron-builder",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

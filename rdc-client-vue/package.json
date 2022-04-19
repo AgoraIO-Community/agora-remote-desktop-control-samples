@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "concurrently \"vue-cli-service serve\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
-    "build": "vue-cli-service build build && tsc -p electron && electron-builder",
+    "build:testing": "vue-cli-service build build && tsc -p electron && electron-builder",
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint"
   },
