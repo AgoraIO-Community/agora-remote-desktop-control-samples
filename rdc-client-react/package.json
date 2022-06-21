@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "agora-electron-sdk": "3.7.0-build.527",
-    "agora-rdc-electron": "^1.1.0",
-    "agora-rdc-webrtc-electron": "^1.0.1",
+    "agora-rdc-electron": "^1.1.1",
+    "agora-rdc-webrtc-electron": "^1.0.2",
     "agora-rtc-sdk-ng": "^4.8.1",
     "antd": "^4.16.7",
     "axios": "^0.22.0",
@@ -47,7 +47,7 @@
     "concurrently": "^6.2.0",
     "cross-env": "^7.0.3",
     "customize-cra": "^1.0.0",
-    "electron": "7.1.2",
+    "electron": "12.0.0",
     "electron-builder": "22.11.11",
     "react-app-rewired": "^2.1.8",
     "react-scripts": "^4.0.3",
@@ -95,7 +95,7 @@
       "!**/{appveyor.yml,.travis.yml,circle.yml}",
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
-    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-electron-${env.ELECTRON_VERSION}-${os}-${arch}.${ext}",
+    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-electron-${os}-${arch}.${ext}",
     "productName": "RDCClient",
     "appId": "io.agora.rdc-client",
     "mac": {
@@ -112,8 +112,7 @@
     }
   },
   "agora_electron": {
-    "electron_version": "7.1.2",
-    "prebuilt": true,
-    "arch": "x64"
+    "electron_version": "12.0.0",
+    "prebuilt": true
   }
 }
