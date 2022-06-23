@@ -1,4 +1,4 @@
-const { override, addWebpackExternals, addWebpackPlugin } = require('customize-cra');
+const { override, addWebpackExternals, addWebpackPlugin, addWebpackResolve } = require('customize-cra');
 const webpack = require('webpack');
 
 const target = process.env.TARGET || 'dev';
@@ -12,6 +12,9 @@ module.exports = override(
   addWebpackExternals({
     'agora-rdc-core': 'commonjs2 agora-rdc-core',
     'agora-electron-sdk': 'commonjs2 agora-electron-sdk',
+  }),
+  addWebpackResolve({
+    fallback: { querystring: false },
   }),
   addWebpackPlugin(
     new webpack.DefinePlugin({

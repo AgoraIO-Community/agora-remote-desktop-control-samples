@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { EnginesProvider } from '../../hooks/engines';
 import { ProfilesProvider } from '../../hooks/profiles';
 import { SessionProvider } from '../../hooks/session';
