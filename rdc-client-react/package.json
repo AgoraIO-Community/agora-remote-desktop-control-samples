@@ -20,9 +20,9 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "agora-electron-sdk": "3.7.0-build.527",
-    "agora-rdc-core": "workspace:^1.0.2",
-    "agora-rdc-electron": "workspace:^1.1.1",
-    "agora-rdc-webrtc-electron": "workspace:^1.0.2",
+    "agora-rdc-core": "^1.0.1",
+    "agora-rdc-electron": "^1.1.0",
+    "agora-rdc-webrtc-electron": "^1.0.1",
     "agora-rtc-sdk-ng": "^4.12.0",
     "antd": "^4.21.3",
     "axios": "^0.22.0",
