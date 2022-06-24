@@ -18,18 +18,22 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: '~/.pnpm-store'
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '16'
+      - run: corepack enable
+      - run: corepack prepare pnpm@6.22.2 --activate
 
       - name: Install dependencies
         run: |
-          npm set config arch=${{ matrix.arch }} && cd rdc-client-react && yarn update-electron && yarn install
+          npm set config arch=${{ matrix.arch }} && cd rdc-client-react && pnpm update-electron && pnpm install rdc
 
       - name: Install the Apple certificate
         if: ${{ matrix.os == 'macos-latest' }}
@@ -57,7 +61,7 @@ jobs:
         env:
           BUILD_NUMBER: ${{ github.run_number	 }}
         run: |
-          cd rdc-client-react && yarn build:testing
+          cd rdc-client-react && pnpm build:testing
 
       - name: Clean up keychain
         if: ${{ matrix.os == 'macos-latest' }}
