@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const target = process.env.TARGET || 'dev';
 
 const API_HOSTS = {
-  dev: 'http://10.103.2.105:3031', // please replace ip with your local network
+  dev: 'https://rdc-api.gz3.agoralab.co', // please replace ip with your local network
   testing: 'https://rdc-api.gz3.agoralab.co',
 };
 

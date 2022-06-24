@@ -8,25 +8,32 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
-        electron: [7.1.2, 9.0.0, 10.2.0, 11.4.10, 12.0.0]
+        arch: ['ia32', 'x64', 'arm64']
+        include:
+          - os: macos-latest
+            arch: ['x64', 'arm64']
+          - os: windows-latest
+            arch: ['x64', 'ia32']
 
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: '~/.pnpm-store'
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '16'
+      - run: corepack enable
+      - run: corepack prepare pnpm@6.22.2 --activate
 
       - name: Install dependencies
-        env:
-          ELECTRON_VERSION: ${{ matrix.electron }}
         run: |
-          cd rdc-client-react && yarn update-electron && yarn install
+          npm set config arch=${{ matrix.arch }} && cd rdc-client-react && pnpm update-electron && pnpm install rdc
 
       - name: Install the Apple certificate
         if: ${{ matrix.os == 'macos-latest' }}
@@ -53,21 +60,13 @@ jobs:
       - name: Build artifacts
         env:
           BUILD_NUMBER: ${{ github.run_number	 }}
-          ELECTRON_VERSION: ${{ matrix.electron }}
         run: |
-          cd rdc-client-react && yarn build:testing
+          cd rdc-client-react && pnpm build:testing
 
       - name: Clean up keychain
         if: ${{ matrix.os == 'macos-latest' }}
         run: |
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: rdc-client-electron-${{ matrix.electron }}-${{ runner.os }}
-          path: |
-            rdc-client-react/dist/*.dmg
-            rdc-client-react/dist/*.exe
 
       - name: Release artifacts
         uses: softprops/action-gh-release@v1

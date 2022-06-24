@@ -13,46 +13,49 @@
   "scripts": {
     "update-electron": "node scripts/update-electron",
     "start": "concurrently \"cross-env BROWSER=none react-app-rewired start\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
-    "build:testing": "yarn clean && cross-env TARGET=testing react-app-rewired build && tsc -p electron && electron-builder",
-    "build:prod": "yarn clean && cross-env TARGET=production react-app-rewired build && tsc -p electron && electron-builder",
+    "build:testing": "npm run clean && cross-env TARGET=testing react-app-rewired build && tsc -p electron && electron-builder",
+    "build:prod": "npm run clean && cross-env TARGET=production react-app-rewired build && tsc -p electron && electron-builder",
     "clean": "rimraf ./build ./dist"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "agora-electron-sdk": "3.7.0-build.527",
-    "agora-rdc-electron": "^1.1.0",
-    "agora-rdc-webrtc-electron": "^1.0.1",
-    "agora-rtc-sdk-ng": "^4.8.1",
-    "antd": "^4.16.7",
+    "agora-rdc-core": "^1.0.2-alpha.1",
+    "agora-rdc-electron": "^1.1.1-alpha.1",
+    "agora-rdc-webrtc-electron": "^1.0.2-alpha.1",
+    "agora-rtc-sdk-ng": "^4.12.0",
+    "antd": "^4.21.3",
     "axios": "^0.22.0",
     "electron-devtools-installer": "^3.2.0",
-    "electron-log": "^4.3.5",
-    "electron-updater": "^4.3.9",
+    "electron-log": "^4.4.8",
+    "electron-updater": "^4.6.5",
     "ora": "^5.4.1",
+    "querystring": "^0.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-router-dom": "^5.2.0",
-    "react-use": "^17.2.4",
-    "styled-components": "^5.3.0",
-    "web-vitals": "^1.0.1"
+    "react-router-dom": "^5.3.3",
+    "react-use": "^17.4.0",
+    "styled-components": "^5.3.5",
+    "web-vitals": "^1.1.2"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^12.0.12",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "@types/react-router-dom": "^5.1.8",
-    "concurrently": "^6.2.0",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^12.20.55",
+    "@types/react": "^17.0.47",
+    "@types/react-dom": "^17.0.17",
+    "@types/react-router-dom": "^5.3.3",
+    "concurrently": "^6.5.1",
     "cross-env": "^7.0.3",
     "customize-cra": "^1.0.0",
-    "electron": "7.1.2",
-    "electron-builder": "22.11.11",
-    "react-app-rewired": "^2.1.8",
-    "react-scripts": "^4.0.3",
+    "electron": "12.0.0",
+    "electron-builder": "23.2.0",
+    "react-app-rewired": "^2.2.1",
+    "react-scripts": "^5.0.1",
     "rimraf": "^3.0.2",
-    "typescript": "^4.1.2"
+    "typescript": "^4.7.4"
   },
   "eslintConfig": {
     "extends": [
@@ -95,13 +98,16 @@
       "!**/{appveyor.yml,.travis.yml,circle.yml}",
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
-    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-electron-${env.ELECTRON_VERSION}-${os}-${arch}.${ext}",
+    "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
     "productName": "RDCClient",
     "appId": "io.agora.rdc-client",
     "mac": {
       "target": "dmg",
       "entitlements": "entitlements.mac.plist",
-      "hardenedRuntime": true
+      "hardenedRuntime": true,
+      "signIgnore": [
+        "/\\.framework$/"
+      ]
     },
     "win": {
       "target": "nsis",
@@ -112,8 +118,7 @@
     }
   },
   "agora_electron": {
-    "electron_version": "7.1.2",
-    "prebuilt": true,
-    "arch": "x64"
+    "electron_version": "12.0.0",
+    "prebuilt": true
   }
 }

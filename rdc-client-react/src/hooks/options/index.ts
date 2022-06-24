@@ -1,7 +1,7 @@
 import { RDCDisplayConfiguration, RDCThresholdOptions } from 'agora-rdc-core';
 import qs from 'querystring';
 import { useMemo } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import { RESOLUTION_BITRATE } from '../../constants';
 import { ControlledOptions, HostOptions, Options } from '../../interfaces';
 import { RTCEngineType } from '../engines';
