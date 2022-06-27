@@ -1,6 +1,6 @@
 {
   "name": "rdc-client-react",
-  "version": "1.0.3",
+  "version": "1.0.4-alpha.1",
   "private": true,
   "license": "MIT",
   "main": "build/electron/main.js",
