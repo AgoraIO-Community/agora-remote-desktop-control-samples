@@ -8,27 +8,26 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
+        arch: [x64]
         include:
-          - arch: x64
-          - arch: arm64
-            os: macos-latest
-          - arch: x64
-          - arch: ia32
-            os: windows-latest
+          - os: macos-latest
+            arch: arm64
+          - os: windows-latest
+            arch: ia32
 
     steps:
       - uses: actions/checkout@v2
 
       - uses: actions/cache@v3
         with:
-          path: '~/.pnpm-store'
+          path: "~/.pnpm-store"
           key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-
 
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: "16"
       - run: corepack enable
       - run: corepack prepare pnpm@6.22.2 --activate
 
