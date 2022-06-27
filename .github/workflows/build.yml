@@ -33,7 +33,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm set config arch=${{ matrix.arch }} && cd rdc-client-react && pnpm update-electron && pnpm install
+          npm set arch=${{ matrix.arch }} && cd rdc-client-react && pnpm update-electron && pnpm install
 
       - name: Install the Apple certificate
         if: ${{ matrix.os == 'macos-latest' }}
