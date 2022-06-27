@@ -61,7 +61,7 @@ jobs:
         env:
           BUILD_NUMBER: ${{ github.run_number	 }}
         run: |
-          cd rdc-client-react && pnpm build:testing -- --${{ matrix.arch }}
+          cd rdc-client-react && pnpm run build:testing -- --${{ matrix.arch }}
 
       - name: Clean up keychain
         if: ${{ matrix.os == 'macos-latest' }}
