@@ -33,7 +33,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm set config arch=${{ matrix.arch }} && cd rdc-client-react && pnpm update-electron && pnpm install rdc
+          npm set config arch=${{ matrix.arch }} && cd rdc-client-react && pnpm update-electron && pnpm install
 
       - name: Install the Apple certificate
         if: ${{ matrix.os == 'macos-latest' }}
@@ -61,7 +61,7 @@ jobs:
         env:
           BUILD_NUMBER: ${{ github.run_number	 }}
         run: |
-          cd rdc-client-react && pnpm build:testing
+          cd rdc-client-react && pnpm build:testing --${{ matrix.arch }}
 
       - name: Clean up keychain
         if: ${{ matrix.os == 'macos-latest' }}
