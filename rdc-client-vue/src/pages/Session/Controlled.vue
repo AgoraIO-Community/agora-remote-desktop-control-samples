@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch, onBeforeUnmount, onMounted, h } from 'vue';
+import { ref, watch, onBeforeUnmount, onMounted, h, shallowRef } from 'vue';
 import { RDCRoleType, RDCDisplay } from 'agora-rdc-core';
 import { message, Modal } from 'ant-design-vue';
 import { PoweroffOutlined } from '@ant-design/icons-vue';
@@ -18,7 +18,7 @@ const rdcDisplayConfiguration = useRDCDisplayConfiguration();
 const userIdsUnderObserving = ref<string[]>([]);
 const visible = ref(false);
 const activeKey = ref<string>();
-const displays = ref<RDCDisplay[]>([]);
+const displays = shallowRef<RDCDisplay[]>([]);
 const userIdControlledBy = ref<string>();
 
 const handleObserve = (userId: string) => {

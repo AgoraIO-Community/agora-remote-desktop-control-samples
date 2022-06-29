@@ -13,8 +13,8 @@
   "dependencies": {
     "@ant-design/icons-vue": "^6.0.1",
     "@vueuse/core": "^7.1.2",
-    "agora-electron-sdk": "3.6.216-build.117",
-    "agora-rdc-electron": "^2.0.0",
+    "agora-electron-sdk": "3.8.202-build.619",
+    "agora-rdc-electron": "^2.0.1-alpha.1",
     "agora-rdc-webrtc-electron": "^1.0.1",
     "agora-rtc-sdk-ng": "^4.8.1",
     "ant-design-vue": "^3.0.0-alpha.14",
@@ -36,7 +36,7 @@
     "@vue/eslint-config-typescript": "^7.0.0",
     "concurrently": "^6.2.0",
     "cross-env": "^7.0.3",
-    "electron": "7.1.2",
+    "electron": "12.0.0",
     "electron-builder": "22.11.11",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
@@ -107,7 +107,7 @@
     }
   },
   "agora_electron": {
-    "electron_version": "7.1.2",
+    "electron_version": "12.0.0",
     "prebuilt": true,
     "arch": "x64"
   },

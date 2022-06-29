@@ -18,9 +18,8 @@
     "clean": "rimraf ./build ./dist"
   },
   "dependencies": {
-    "@ant-design/icons": "^4.7.0",
     "agora-electron-sdk": "3.8.202-build.619",
-    "agora-rdc-electron": "^2.0.0",
+    "agora-rdc-electron": "^2.0.1-alpha.1",
     "agora-rdc-webrtc-electron": "^1.0.1",
     "agora-rtc-sdk-ng": "^4.12.1",
     "antd": "^4.21.4",
