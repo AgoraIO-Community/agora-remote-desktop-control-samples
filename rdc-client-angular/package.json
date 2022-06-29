@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "~13.1.0",
     "@angular/router": "~13.1.0",
     "agora-electron-sdk": "3.8.202-build.619",
+    "agora-rdc-core": "^1.0.2-alpha.1",
     "agora-rdc-electron": "^2.0.1-alpha.1",
     "agora-rdc-webrtc-electron": "^1.0.1",
     "agora-rtc-sdk-ng": "^4.8.1",
