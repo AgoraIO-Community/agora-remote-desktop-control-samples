@@ -70,7 +70,7 @@
       "!**/{appveyor.yml,.travis.yml,circle.yml}",
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
-    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-electron-${env.ELECTRON_VERSION}-${os}-${arch}.${ext}",
+    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-${os}-${arch}.${ext}",
     "productName": "RDCClientAngular",
     "appId": "io.agora.rdc-client-angular",
     "mac": {
