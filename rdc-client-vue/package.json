@@ -6,16 +6,17 @@
   "scripts": {
     "update-electron": "node scripts/update-electron",
     "start": "concurrently \"vue-cli-service serve\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
-    "build:testing": "vue-cli-service build && tsc -p electron && electron-builder",
+    "build": "vue-cli-service build && tsc -p electron && electron-builder",
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.0.1",
     "@vueuse/core": "^7.1.2",
-    "agora-electron-sdk": "3.6.216-build.117",
-    "agora-rdc-electron": "^2.0.0",
-    "agora-rdc-webrtc-electron": "^1.0.1",
+    "agora-electron-sdk": "3.8.202-build.619",
+    "agora-rdc-core": "^1.0.2",
+    "agora-rdc-electron": "^2.0.1-alpha.2",
+    "agora-rdc-webrtc-electron": "^1.0.2",
     "agora-rtc-sdk-ng": "^4.8.1",
     "ant-design-vue": "^3.0.0-alpha.14",
     "axios": "^0.26.1",
@@ -36,8 +37,8 @@
     "@vue/eslint-config-typescript": "^7.0.0",
     "concurrently": "^6.2.0",
     "cross-env": "^7.0.3",
-    "electron": "7.1.2",
-    "electron-builder": "22.11.11",
+    "electron": "12.0.0",
+    "electron-builder": "^23.2.0",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.0.0",
@@ -78,6 +79,7 @@
     "files": [
       "build/**/*",
       "node_modules/**/*",
+      "!**/node_modules/**/agora-rdc-core/sdk/**/*",
       "!**/node_modules/**/{CHANGELOG.md,README.md,README,readme.md,README.zh.md}",
       "!**/node_modules/**/{nodemon.json,rollup.config.js,tsconfig.json,typedoc.json,rc_message.proto}",
       "!**/node_modules/**/*.{ts,h,cc,cpp,gyp,map,hpp,mm,proto,cmd,tar.gz,a,la,inc,pc,dSYM}",
@@ -90,13 +92,16 @@
       "!**/{appveyor.yml,.travis.yml,circle.yml}",
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
-    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-electron-${env.ELECTRON_VERSION}-${os}-${arch}.${ext}",
-    "productName": "RDCClientVue",
+    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-${os}-${arch}.${ext}",
+    "productName": "RDCClient-Vue",
     "appId": "io.agora.rdc-client-vue",
     "mac": {
       "target": "dmg",
       "entitlements": "entitlements.mac.plist",
-      "hardenedRuntime": true
+      "hardenedRuntime": true,
+      "signIgnore": [
+        "/\\.framework$/"
+      ]
     },
     "win": {
       "target": "nsis",
@@ -107,14 +112,8 @@
     }
   },
   "agora_electron": {
-    "electron_version": "7.1.2",
+    "electron_version": "12.0.0",
     "prebuilt": true,
     "arch": "x64"
-  },
-  "workspaces": {
-    "nohoist": [
-      "**/@vue/cli-plugin-eslint",
-      "**/@vue/cli-plugin-eslint/**"
-    ]
   }
 }

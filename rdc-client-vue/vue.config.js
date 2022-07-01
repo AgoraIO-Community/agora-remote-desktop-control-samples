@@ -1,6 +1,11 @@
 const webpack = require('webpack');
 
-const API_HOST = 'https://rdc-api.gz3.agoralab.co';
+const target = process.env.TARGET || 'production';
+
+const API_HOSTS = {
+  dev: 'http://10.103.2.105:3031', // please replace ip with your local network
+  production: 'https://rdc-api.gz3.agoralab.co',
+};
 
 module.exports = {
   outputDir: 'build',
@@ -18,7 +23,7 @@ module.exports = {
   configureWebpack: (config) => {
     config.plugins.push(
       new webpack.DefinePlugin({
-        API_HOST: JSON.stringify(API_HOST),
+        API_HOST: JSON.stringify(API_HOSTS[target]),
       }),
     );
   },

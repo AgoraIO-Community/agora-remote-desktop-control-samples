@@ -8,26 +8,33 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
-        electron: [12.0.0]
+        arc: [x64]
         framework: ['angular', 'react', 'vue']
+        include:
+          - os: macos-latest
+            arch: arm64
+          - os: windows-latest
+            arch: ia32
 
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: "~/.pnpm-store"
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: "16"
+      - run: corepack enable
+      - run: corepack prepare pnpm@latest --activate
 
       - name: Install dependencies
-        env:
-          ELECTRON_VERSION: ${{ matrix.electron }}
         run: |
-          cd rdc-client-${{ matrix.framework }} && yarn update-electron && yarn install
+          npm set arch=${{ matrix.arch }} && cd rdc-client-${{ matrix.framework }} && pnpm update-electron && pnpm install
 
       - name: Install the Apple certificate
         if: ${{ matrix.os == 'macos-latest' }}
@@ -56,7 +63,7 @@ jobs:
           BUILD_NUMBER: ${{ github.run_number	 }}
           ELECTRON_VERSION: ${{ matrix.electron }}
         run: |
-          cd rdc-client-${{ matrix.framework }} && yarn build:testing
+          cd rdc-client-${{ matrix.framework }} && pnpm build -- --${{ matrix.arch }}
 
       - name: Clean up keychain
         if: ${{ matrix.os == 'macos-latest' }}
