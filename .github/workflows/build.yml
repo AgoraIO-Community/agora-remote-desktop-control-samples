@@ -13,10 +13,23 @@ jobs:
         include:
           - os: macos-latest
             arch: arm64
-            framework: ['angular', 'react', 'vue']
+            framework: angular
           - os: windows-latest
             arch: ia32
-            framework: ['angular', 'react', 'vue']
+            framework: angular
+          - os: macos-latest
+            arch: arm64
+            framework: vue
+          - os: windows-latest
+            arch: ia32
+            framework: vue
+          - os: macos-latest
+            arch: arm64
+            framework: react
+          - os: windows-latest
+            arch: ia32
+            framework: react
+
 
     steps:
       - uses: actions/checkout@v2
@@ -36,7 +49,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm set arch=${{ matrix.arch }} && cd rdc-client-${{ matrix.framework }} && pnpm update-electron && pnpm install
+          npm set arch=${{ matrix.arch }} && cd rdc-client-${{ matrix.framework }} && pnpm update-electron && pnpm install --no-frozen-lockfile
 
       - name: Install the Apple certificate
         if: ${{ matrix.os == 'macos-latest' }}
