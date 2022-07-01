@@ -63,7 +63,7 @@ jobs:
           BUILD_NUMBER: ${{ github.run_number	 }}
           ELECTRON_VERSION: ${{ matrix.electron }}
         run: |
-          cd rdc-client-${{ matrix.framework }} && pnpm build:testing -- --${{ matrix.arch }}
+          cd rdc-client-${{ matrix.framework }} && pnpm build -- --${{ matrix.arch }}
 
       - name: Clean up keychain
         if: ${{ matrix.os == 'macos-latest' }}
