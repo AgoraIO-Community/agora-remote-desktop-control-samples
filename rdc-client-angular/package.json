@@ -21,9 +21,9 @@
     "@angular/platform-browser-dynamic": "~13.1.0",
     "@angular/router": "~13.1.0",
     "agora-electron-sdk": "3.8.202-build.619",
-    "agora-rdc-core": "^1.0.2-alpha.1",
-    "agora-rdc-electron": "^2.0.1-alpha.1",
-    "agora-rdc-webrtc-electron": "^1.0.1",
+    "agora-rdc-core": "^1.0.2",
+    "agora-rdc-electron": "^2.0.1-alpha.2",
+    "agora-rdc-webrtc-electron": "^1.0.2",
     "agora-rtc-sdk-ng": "^4.8.1",
     "ng-zorro-antd": "12.1.0",
     "rxjs": "~7.4.0",
@@ -38,7 +38,7 @@
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
     "electron": "12.0.0",
-    "electron-builder": "^23.1.0",
+    "electron-builder": "^23.2.0",
     "jasmine-core": "~3.10.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
@@ -58,6 +58,7 @@
     "files": [
       "build/**/*",
       "node_modules/**/*",
+      "!**/node_modules/**/agora-rdc-core/sdk/**/*",
       "!**/node_modules/**/{CHANGELOG.md,README.md,README,readme.md,README.zh.md}",
       "!**/node_modules/**/{nodemon.json,rollup.config.js,tsconfig.json,typedoc.json,rc_message.proto}",
       "!**/node_modules/**/*.{ts,h,cc,cpp,gyp,map,hpp,mm,proto,cmd,tar.gz,a,la,inc,pc,dSYM}",
@@ -71,12 +72,15 @@
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
     "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-${os}-${arch}.${ext}",
-    "productName": "RDCClientAngular",
+    "productName": "RDCClient-Angular",
     "appId": "io.agora.rdc-client-angular",
     "mac": {
       "target": "dmg",
       "entitlements": "entitlements.mac.plist",
-      "hardenedRuntime": true
+      "hardenedRuntime": true,
+      "signIgnore": [
+        "/\\.framework$/"
+      ]
     },
     "win": {
       "target": "nsis",
