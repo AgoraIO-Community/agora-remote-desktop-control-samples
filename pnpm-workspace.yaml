@@ -1,0 +1,4 @@
+packages:
+  - 'rdc-client-angular'
+  - 'rdc-client-react'
+  - 'rdc-client-vue'

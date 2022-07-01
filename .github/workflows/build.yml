@@ -9,26 +9,11 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest]
         arc: [x64]
-        framework: ['angular', 'react', 'vue']
         include:
           - os: macos-latest
             arch: arm64
-            framework: angular
           - os: windows-latest
             arch: ia32
-            framework: angular
-          - os: macos-latest
-            arch: arm64
-            framework: vue
-          - os: windows-latest
-            arch: ia32
-            framework: vue
-          - os: macos-latest
-            arch: arm64
-            framework: react
-          - os: windows-latest
-            arch: ia32
-            framework: react
 
 
     steps:
@@ -49,7 +34,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm set arch=${{ matrix.arch }} && cd rdc-client-${{ matrix.framework }} && pnpm update-electron && pnpm install --no-frozen-lockfile
+          npm set arch=${{ matrix.arch }} && pnpm update-electron && pnpm install --no-frozen-lockfile
 
       - name: Install the Apple certificate
         if: ${{ matrix.os == 'macos-latest' }}
@@ -76,9 +61,8 @@ jobs:
       - name: Build artifacts
         env:
           BUILD_NUMBER: ${{ github.run_number	 }}
-          ELECTRON_VERSION: ${{ matrix.electron }}
         run: |
-          cd rdc-client-${{ matrix.framework }} && pnpm build -- --${{ matrix.arch }}
+          pnpm build -- --${{ matrix.arch }}
 
       - name: Clean up keychain
         if: ${{ matrix.os == 'macos-latest' }}
@@ -90,5 +74,5 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            rdc-client-${{ matrix.framework }}/dist/*.dmg
-            rdc-client-${{ matrix.framework }}/dist/*.exe
+            rdc-client-*/dist/*.dmg
+            rdc-client-*/dist/*.exe

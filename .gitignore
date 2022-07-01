@@ -10,3 +10,4 @@ log
 .DS_Store
 agoraAddonlog.txt
 *.dmp
+pnpm-lock.yaml

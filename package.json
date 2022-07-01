@@ -1,0 +1,8 @@
+{
+  "name": "sampels",
+  "private": true,
+  "scripts": {
+    "update-electron": "pnpm --stream --filter=rdc-client-* run update-electron",
+    "build": "pnpm --stream --filter=rdc-client-* run build"
+  }
+}
