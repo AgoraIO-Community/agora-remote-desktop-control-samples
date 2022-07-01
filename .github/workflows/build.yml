@@ -13,8 +13,10 @@ jobs:
         include:
           - os: macos-latest
             arch: arm64
+            framework: ['angular', 'react', 'vue']
           - os: windows-latest
             arch: ia32
+            framework: ['angular', 'react', 'vue']
 
     steps:
       - uses: actions/checkout@v2
@@ -30,7 +32,7 @@ jobs:
         with:
           node-version: "16"
       - run: corepack enable
-      - run: corepack prepare pnpm@latest --activate
+      - run: corepack prepare pnpm@7.4.0 --activate
 
       - name: Install dependencies
         run: |
