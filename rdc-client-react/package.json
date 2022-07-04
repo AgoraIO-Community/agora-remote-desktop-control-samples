@@ -97,7 +97,7 @@
       "!**/{appveyor.yml,.travis.yml,circle.yml}",
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
-    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-${os}-${arch}.${ext}",
+    "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
     "productName": "RDCClient-React",
     "appId": "io.agora.rdc-client-react",
     "mac": {
