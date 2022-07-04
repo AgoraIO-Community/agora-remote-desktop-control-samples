@@ -77,7 +77,6 @@
       "node_modules/agora-rdc-core/**/*",
       "node_modules/agora-electron-sdk/**/*"
     ],
-    "afterPack": "./after-pack.js",
     "files": [
       "build/**/*",
       "node_modules/**/*",
@@ -102,7 +101,7 @@
       "entitlements": "entitlements.mac.plist",
       "hardenedRuntime": true,
       "signIgnore": [
-        "/\\.framework$/"
+        "^.*.*/node_modules/.*.*/.*.framework($|.*$)"
       ]
     },
     "win": {
