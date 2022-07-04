@@ -42,7 +42,7 @@ async function removeInvalidSymlinks({
   console.log('===========================');
 
   const waitUntilAllInvalidSymlinksRemoved = invalidSymlinksInArray.map((invalidSymlink) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       exec(`rm ${invalidSymlink}`, (error, stdout, stderr) => {
         console.log(`command: rm ${invalidSymlink}`);
 
