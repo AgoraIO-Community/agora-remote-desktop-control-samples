@@ -24,7 +24,7 @@
     "agora-rdc-core": "^1.0.3",
     "agora-rdc-electron": "^2.0.1-alpha.2",
     "agora-rdc-webrtc-electron": "^1.0.3",
-    "agora-rtc-sdk-ng": "^4.8.1",
+    "agora-rtc-sdk-ng": "^4.12.1",
     "ng-zorro-antd": "^13.3.2",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",

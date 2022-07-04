@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "agora-rdc-webrtc-electron": "^1.0.0",
-    "agora-rtc-sdk-ng": "^4.8.1",
+    "agora-rtc-sdk-ng": "^4.12.1",
     "querystring": "^0.2.1"
   },
   "agora_electron": {
