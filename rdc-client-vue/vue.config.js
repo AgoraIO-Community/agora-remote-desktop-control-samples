@@ -14,7 +14,7 @@ module.exports = {
     port: 3000,
   },
   chainWebpack: (config) => {
-    config.resolve.symlinks(false)
+    config.resolve.symlinks(false);
     config.externals({
       'agora-rdc-core': 'commonjs2 agora-rdc-core',
       'agora-electron-sdk': 'commonjs2 agora-electron-sdk',

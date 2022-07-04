@@ -4,7 +4,6 @@ import { ControlledOptions } from '../../interfaces';
 import { RESOLUTION_BITRATE } from '../../constants';
 import { useOptions } from './useOptions';
 
-
 export const useRDCDisplayConfiguration = (): Partial<RDCDisplayConfiguration> => {
   const { resolutionBitrate, frameRate } = useOptions<ControlledOptions>();
   const configuration = reactive<Partial<RDCDisplayConfiguration>>({ frameRate });

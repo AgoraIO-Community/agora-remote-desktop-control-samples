@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, watch, onBeforeUnmount, onMounted, h, shallowRef } from 'vue';
+import { ref, watch, h, shallowRef } from 'vue';
 import { RDCRoleType, RDCDisplay } from 'agora-rdc-core';
 import { message, Modal } from 'ant-design-vue';
 import { PoweroffOutlined } from '@ant-design/icons-vue';
@@ -121,7 +121,7 @@ watch([engines], () => {
         :key="`${profile.userId}`"
         :tab="profile.name"
       >
-      <Observer :userId="profile.userId" :streamId="profile.screenStreamId"/>
+        <Observer :userId="profile.userId" :streamId="profile.screenStreamId" />
       </a-tab-pane>
     </a-tabs>
     <Profiles>
