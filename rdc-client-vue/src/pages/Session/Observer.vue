@@ -1,18 +1,3 @@
-<script lang="ts">
-export default {
-  props: {
-    userId: {
-      type: String,
-      required: true,
-    },
-    streamId: {
-      type: Number,
-      required: true,
-    },
-  },
-};
-</script>
-
 <script lang="ts" setup>
 import { ref, watch, defineProps } from 'vue';
 import { useWindowSize } from '@vueuse/core';

@@ -40,7 +40,7 @@ const createWindow = async () => {
 app.whenReady().then(createWindow);
 app.allowRendererProcessReuse = false;
 app.on('window-all-closed', () => {
-  killZombies()
+  killZombies();
   if (process.platform !== 'darwin') {
     app.quit();
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { RDCRoleType } from 'agora-rdc-core';
 import { HostOptions, ControlledOptions } from '../../interfaces';
 import { LocalStorageService } from '../../service/local-storage/local-storage.service';
@@ -33,9 +33,9 @@ const CONTROLLED_OPTS_STORAGE_KEY = 'controlled-opts';
   styleUrls: ['./landing.component.css'],
 })
 export class LandingComponent implements OnInit {
-  landingForm!: FormGroup;
-  hostOptsForm!: FormGroup;
-  controlledOptsForm!: FormGroup;
+  landingForm!: UntypedFormGroup;
+  hostOptsForm!: UntypedFormGroup;
+  controlledOptsForm!: UntypedFormGroup;
 
   get roleOpts() {
     return [
@@ -60,7 +60,7 @@ export class LandingComponent implements OnInit {
   visible = false;
 
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private storage: LocalStorageService,
     private api: APIService,
     private router: Router,
@@ -147,7 +147,7 @@ export class LandingComponent implements OnInit {
     this.controlledOptsForm.patchValue(controlledOpts);
   }
 
-  private validate(fg: FormGroup) {
+  private validate(fg: UntypedFormGroup) {
     Object.values(fg.controls).forEach((control) => {
       if (control.invalid) {
         control.markAsDirty();

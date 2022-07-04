@@ -36,7 +36,7 @@
                 "output": "/assets/"
               }
             ],
-            "styles": ["src/theme.less", "src/styles.css"],
+            "styles": ["src/styles.css"],
             "scripts": []
           },
           "configurations": {
@@ -105,5 +105,8 @@
       }
     }
   },
-  "defaultProject": "rdc-client-angular"
+  "cli": {
+    "analytics": "411390ff-3dc5-43b8-bd2b-60bd71e678d1",
+    "packageManager": "pnpm"
+  }
 }
