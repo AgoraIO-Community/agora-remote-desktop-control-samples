@@ -62,8 +62,6 @@ jobs:
           pnpm build
 
       - name: Assemble
-        env:
-          USE_HARD_LINKS: false
         run: |
           pnpm assemble --${{ matrix.arch }}
 
