@@ -36,7 +36,7 @@ jobs:
           npm set arch=${{ matrix.arch }} && pnpm update-electron && pnpm install --no-frozen-lockfile
 
       - name: Install the Apple certificate
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ matrix.os == 'macos-latest' && !startsWith(github.ref, 'refs/pull/') }}
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
@@ -68,7 +68,7 @@ jobs:
           pnpm assemble --${{ matrix.arch }}
 
       - name: Clean up keychain
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ matrix.os == 'macos-latest' && !startsWith(github.ref, 'refs/pull/') }}
         run: |
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
 
