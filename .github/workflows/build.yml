@@ -61,9 +61,7 @@ jobs:
         env:
             USE_HARD_LINKS: false
         run: |
-          pnpm build:angular --${{ matrix.arch }}
-          pnpm build:react --${{ matrix.arch }}
-          pnpm build:vue --${{ matrix.arch }}
+          pnpm build --${{ matrix.arch }}
 
       - name: Clean up keychain
         if: ${{ matrix.os == 'macos-latest' && !startsWith(github.ref, 'refs/pull/') }}
