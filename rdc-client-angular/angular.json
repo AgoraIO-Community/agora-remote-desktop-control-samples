@@ -6,8 +6,8 @@
     "rdc-client-angular": {
       "projectType": "application",
       "schematics": {
-        "@schematics/angular:application": {
-          "strict": true
+        "@schematics/angular:component": {
+          "style": "less"
         }
       },
       "root": "",
@@ -27,6 +27,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "less",
             "assets": [
               "src/favicon.ico",
               "src/assets",
@@ -36,7 +37,9 @@
                 "output": "/assets/"
               }
             ],
-            "styles": ["src/styles.css"],
+            "styles": [
+              "src/styles.less"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -97,8 +100,14 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.css"],
+            "inlineStyleLanguage": "less",
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.less"
+            ],
             "scripts": []
           }
         }
@@ -106,7 +115,7 @@
     }
   },
   "cli": {
-    "analytics": "411390ff-3dc5-43b8-bd2b-60bd71e678d1",
+    "analytics": "834d13f5-f4c8-442c-aaf4-224dc5213067",
     "packageManager": "pnpm"
   }
 }
