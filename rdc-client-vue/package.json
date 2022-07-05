@@ -6,7 +6,7 @@
   "scripts": {
     "update-electron": "node scripts/update-electron",
     "start": "concurrently \"vue-cli-service serve\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
-    "build": "vue-cli-service build && tsc -p electron && electron-builder",
+    "build": "vue-cli-service build && tsc -p electron && cross-env USE_HARD_LINKS=false electron-builder",
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint"
   },

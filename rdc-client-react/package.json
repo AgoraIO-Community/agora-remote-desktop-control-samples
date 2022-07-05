@@ -13,7 +13,7 @@
   "scripts": {
     "update-electron": "node scripts/update-electron",
     "start": "concurrently \"cross-env BROWSER=none react-app-rewired start\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
-    "build": "react-app-rewired build && tsc -p electron && electron-builder",
+    "build": "react-app-rewired build && tsc -p electron && cross-env USE_HARD_LINKS=false electron-builder",
     "clean": "rimraf ./build ./dist"
   },
   "dependencies": {
