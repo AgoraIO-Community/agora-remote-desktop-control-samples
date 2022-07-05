@@ -1,5 +1,5 @@
 name: CI
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -36,7 +36,7 @@ jobs:
           npm set arch=${{ matrix.arch }} && pnpm update-electron && pnpm install --no-frozen-lockfile
 
       - name: Install the Apple certificate
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ matrix.os == 'macos-latest' && !startsWith(github.ref, 'refs/pull/') }}
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           P12_PASSWORD: ${{ secrets.P12_PASSWORD }}
@@ -57,14 +57,18 @@ jobs:
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
 
-      - name: Build artifacts
-        env:
-          BUILD_NUMBER: ${{ github.run_number	 }}
+      - name: Build
         run: |
-          pnpm build -- --${{ matrix.arch }}
+          pnpm build
+
+      - name: Assemble
+        env:
+          USE_HARD_LINKS: false
+        run: |
+          pnpm assemble --${{ matrix.arch }}
 
       - name: Clean up keychain
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ matrix.os == 'macos-latest' && !startsWith(github.ref, 'refs/pull/') }}
         run: |
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
 

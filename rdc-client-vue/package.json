@@ -6,7 +6,8 @@
   "scripts": {
     "update-electron": "node scripts/update-electron",
     "start": "concurrently \"vue-cli-service serve\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
-    "build": "vue-cli-service build && tsc -p electron && cross-env USE_HARD_LINKS=false electron-builder",
+    "build": "vue-cli-service build && tsc -p electron",
+    "assemble": "electron-builder",
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint"
   },
@@ -38,7 +39,7 @@
     "concurrently": "^6.2.0",
     "cross-env": "^7.0.3",
     "electron": "12.0.0",
-    "electron-builder": "^23.2.0",
+    "electron-builder": "^23.3.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",

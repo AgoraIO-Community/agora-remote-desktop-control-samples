@@ -6,7 +6,8 @@
     "update-electron": "node scripts/update-electron",
     "ng": "ng",
     "start": "concurrently \"ng serve\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
-    "build": "ng build --configuration=production && tsc -p electron && cross-env USE_HARD_LINKS=false electron-builder",
+    "build": "ng build --configuration=production && tsc -p electron",
+    "assemble": "electron-builder",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -41,7 +42,7 @@
     "concurrently": "^7.2.2",
     "cross-env": "^7.0.3",
     "electron": "12.0.0",
-    "electron-builder": "^23.2.0",
+    "electron-builder": "^23.3.0",
     "jasmine-core": "~3.10.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
