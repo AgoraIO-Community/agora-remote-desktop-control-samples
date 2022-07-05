@@ -5,7 +5,7 @@
   "private": "true",
   "scripts": {
     "start": "concurrently \"vite\" \"tsc -p electron && cross-env NODE_ENV=development electron .\"",
-    "build": "vite build && tsc -p electron && electron-builder"
+    "build": "vite build && tsc -p electron && cross-env USE_HARD_LINKS=false electron-builder"
   },
   "devDependencies": {
     "electron": "^12.0.0",
