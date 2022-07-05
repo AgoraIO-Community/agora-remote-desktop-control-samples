@@ -3,6 +3,6 @@
   "private": true,
   "scripts": {
     "update-electron": "pnpm --stream --filter=rdc-client-* run update-electron",
-    "build": "pnpm --parallel --filter=rdc-client-* run build"
+    "build": "pnpm --stream --filter=rdc-client-* run build"
   }
 }
