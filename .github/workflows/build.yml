@@ -57,11 +57,15 @@ jobs:
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
 
-      - name: Build artifacts
-        env:
-          BUILD_NUMBER: ${{ github.run_number	 }}
+      - name: Build
         run: |
-          pnpm build -- --${{ matrix.arch }}
+          pnpm build
+
+      - name: Assemble
+        env:
+          USE_HARD_LINKS: false
+        run: |
+          pnpm assemble --${{ matrix.arch }}
 
       - name: Clean up keychain
         if: ${{ matrix.os == 'macos-latest' }}
