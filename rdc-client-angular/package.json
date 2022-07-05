@@ -12,40 +12,43 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^14.0.4",
-    "@angular/common": "^14.0.4",
-    "@angular/compiler": "^14.0.4",
-    "@angular/core": "^14.0.4",
-    "@angular/forms": "^14.0.4",
-    "@angular/platform-browser": "^14.0.4",
-    "@angular/platform-browser-dynamic": "^14.0.4",
-    "@angular/router": "^14.0.4",
+    "@angular/animations": "^14.0.0",
+    "@angular/common": "^14.0.0",
+    "@angular/compiler": "^14.0.0",
+    "@angular/core": "^14.0.0",
+    "@angular/forms": "^14.0.0",
+    "@angular/platform-browser": "^14.0.0",
+    "@angular/platform-browser-dynamic": "^14.0.0",
+    "@angular/router": "^14.0.0",
+    "@ant-design/icons-angular": "^13.1.0",
     "agora-electron-sdk": "3.8.202-build.619",
     "agora-rdc-core": "^1.0.3",
-    "agora-rdc-electron": "^2.0.1-alpha.2",
+    "agora-rdc-electron": "^2.0.1",
     "agora-rdc-webrtc-electron": "^1.0.3",
-    "agora-rtc-sdk-ng": "^4.8.1",
+    "agora-rtc-sdk-ng": "^4.12.1",
     "ng-zorro-antd": "^13.3.2",
-    "rxjs": "~7.4.0",
+    "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "^14.0.0",
     "@angular-devkit/build-angular": "^14.0.4",
-    "@angular/cli": "^14.0.4",
-    "@angular/compiler-cli": "^14.0.4",
-    "@types/jasmine": "~3.10.0",
-    "@types/node": "^12.11.1",
+    "@angular/cli": "~14.0.4",
+    "@angular/compiler-cli": "^14.0.0",
+    "@types/jasmine": "~4.0.0",
+    "@types/node": "^18.0.1",
+    "concurrently": "^7.2.2",
+    "cross-env": "^7.0.3",
     "electron": "12.0.0",
     "electron-builder": "^23.2.0",
     "jasmine-core": "~3.10.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
-    "karma-coverage": "~2.1.0",
-    "karma-jasmine": "~4.0.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
-    "typescript": "~4.7.4"
+    "typescript": "~4.7.2"
   },
   "build": {
     "extends": null,
@@ -54,7 +57,6 @@
       "node_modules/agora-rdc-core/**/*",
       "node_modules/agora-electron-sdk/**/*"
     ],
-    "afterPack": "./after-pack.js",
     "files": [
       "build/**/*",
       "node_modules/**/*",
@@ -71,7 +73,7 @@
       "!**/{appveyor.yml,.travis.yml,circle.yml}",
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
-    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-${os}-${arch}.${ext}",
+    "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
     "productName": "RDCClient-Angular",
     "appId": "io.agora.rdc-client-angular",
     "mac": {
@@ -79,7 +81,7 @@
       "entitlements": "entitlements.mac.plist",
       "hardenedRuntime": true,
       "signIgnore": [
-        "/\\.framework$/"
+        "^.*.*/node_modules/.*.*/.*.framework($|.*$)"
       ]
     },
     "win": {

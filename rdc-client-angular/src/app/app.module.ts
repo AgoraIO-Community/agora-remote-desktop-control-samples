@@ -20,6 +20,15 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzTagModule } from 'ng-zorro-antd/tag';
+import { IconDefinition } from '@ant-design/icons-angular';
+import {
+  SettingOutline,
+  PoweroffOutline,
+  FullscreenOutline,
+  FullscreenExitOutline,
+  LoadingOutline,
+  UserOutline,
+} from '@ant-design/icons-angular/icons';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -33,6 +42,15 @@ import { HostComponent } from './pages/session/host/host.component';
 import { ControllerComponent } from './pages/session/controller/controller.component';
 import { ControlledComponent } from './pages/session/controlled/controlled.component';
 import { ObserverComponent } from './pages/session/observer/observer.component';
+
+const icons: IconDefinition[] = [
+  SettingOutline,
+  PoweroffOutline,
+  FullscreenOutline,
+  FullscreenExitOutline,
+  LoadingOutline,
+  UserOutline,
+];
 
 registerLocaleData(en);
 @NgModule({
@@ -59,7 +77,7 @@ registerLocaleData(en);
     NzSelectModule,
     NzButtonModule,
     NzAffixModule,
-    NzIconModule,
+    NzIconModule.forRoot(icons),
     NzModalModule,
     NzInputNumberModule,
     NzDrawerModule,

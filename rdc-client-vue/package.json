@@ -17,7 +17,7 @@
     "agora-rdc-core": "^1.0.3",
     "agora-rdc-electron": "^2.0.1-alpha.2",
     "agora-rdc-webrtc-electron": "^1.0.3",
-    "agora-rtc-sdk-ng": "^4.8.1",
+    "agora-rtc-sdk-ng": "^4.12.1",
     "ant-design-vue": "^3.0.0-alpha.14",
     "axios": "^0.26.1",
     "core-js": "^3.6.5",
@@ -77,7 +77,6 @@
       "node_modules/agora-rdc-core/**/*",
       "node_modules/agora-electron-sdk/**/*"
     ],
-    "afterPack": "./after-pack.js",
     "files": [
       "build/**/*",
       "node_modules/**/*",
@@ -94,7 +93,7 @@
       "!**/{appveyor.yml,.travis.yml,circle.yml}",
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
-    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-${os}-${arch}.${ext}",
+    "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
     "productName": "RDCClient-Vue",
     "appId": "io.agora.rdc-client-vue",
     "mac": {
@@ -102,7 +101,7 @@
       "entitlements": "entitlements.mac.plist",
       "hardenedRuntime": true,
       "signIgnore": [
-        "/\\.framework$/"
+        "^.*.*/node_modules/.*.*/.*.framework($|.*$)"
       ]
     },
     "win": {

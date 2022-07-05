@@ -80,7 +80,6 @@
       "node_modules/agora-rdc-core/**/*",
       "node_modules/agora-electron-sdk/**/*"
     ],
-    "afterPack": "./after-pack.js",
     "files": [
       "build/**/*",
       "node_modules/**/*",
@@ -97,7 +96,7 @@
       "!**/{appveyor.yml,.travis.yml,circle.yml}",
       "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
-    "artifactName": "${productName}-v${version}.build${env.BUILD_NUMBER}-${os}-${arch}.${ext}",
+    "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
     "productName": "RDCClient-React",
     "appId": "io.agora.rdc-client-react",
     "mac": {
@@ -105,7 +104,7 @@
       "entitlements": "entitlements.mac.plist",
       "hardenedRuntime": true,
       "signIgnore": [
-        "/\\.framework$/"
+        "^.*.*/node_modules/.*.*/.*.framework($|.*$)"
       ]
     },
     "win": {
