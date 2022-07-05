@@ -57,15 +57,13 @@ jobs:
           security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
 
-      - name: Build
-        run: |
-          pnpm build
-
-      - name: Assemble
+      - name: Build artifacts
         env:
-          USE_HARD_LINKS: false
+            USE_HARD_LINKS: false
         run: |
-          pnpm assemble --${{ matrix.arch }}
+          pnpm build:angular --${{ matrix.arch }}
+          pnpm build:react --${{ matrix.arch }}
+          pnpm build:vue --${{ matrix.arch }}
 
       - name: Clean up keychain
         if: ${{ matrix.os == 'macos-latest' && !startsWith(github.ref, 'refs/pull/') }}
