@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "update-electron": "pnpm --parallel --filter=rdc-client-* run update-electron",
-    "build:angular": "pnpm --stream --filter=rdc-client-react run build",
+    "build:angular": "pnpm --stream --filter=rdc-client-angular run build",
     "build:react": "pnpm --stream --filter=rdc-client-react run build",
-    "build:vue": "pnpm --stream --filter=rdc-client-react run build"
+    "build:vue": "pnpm --stream --filter=rdc-client-vue run build"
   }
 }
