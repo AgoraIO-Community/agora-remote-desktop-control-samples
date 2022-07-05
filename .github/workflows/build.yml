@@ -58,6 +58,8 @@ jobs:
           security list-keychain -d user -s $KEYCHAIN_PATH
 
       - name: Build artifacts
+        env:
+            USE_HARD_LINKS: false
         run: |
           pnpm build --${{ matrix.arch }}
 
