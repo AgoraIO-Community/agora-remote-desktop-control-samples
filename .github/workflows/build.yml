@@ -31,6 +31,11 @@ jobs:
       - run: corepack enable
       - run: corepack prepare pnpm@7.4.0 --activate
 
+      - uses: maxim-lobanov/setup-xcode@v1
+        if: ${{ runner.os == 'macOS' && !startsWith(github.ref, 'refs/pull/') }}
+        with:
+          xcode-version: latest-stable
+
       - name: Install dependencies
         run: |
           npm set arch=${{ matrix.arch }} && pnpm update-electron && pnpm install --no-frozen-lockfile
