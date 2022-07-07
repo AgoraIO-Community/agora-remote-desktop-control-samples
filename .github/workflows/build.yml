@@ -65,6 +65,7 @@ jobs:
       - name: Build artifacts
         env:
             USE_HARD_LINKS: false
+            DEBUG: electron-builder
         run: |
           pnpm build --${{ matrix.arch }}
 
